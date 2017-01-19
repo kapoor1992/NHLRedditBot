@@ -45,7 +45,7 @@ def get_error_message(name):
 def add_dad(dad):
 
     # fill in reddit account name for contact
-    return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^my ^^dad.](https://reddit.com/u/' + dad + ')'
+    return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^our ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
 
 def get_words(message):
     words = message.body.strip().split(" ")
