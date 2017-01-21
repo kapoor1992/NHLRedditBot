@@ -45,7 +45,7 @@ def get_error_message(name):
 def add_dad(dad):
 
     # fill in reddit account name for contact
-    return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^our ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
+    return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^my ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
 
 def get_words(message):
     words = message.body.strip().split(" ")
@@ -137,8 +137,9 @@ def handle_message_request(words, teams, my_name):
         return make_chart(players, words[next_avail_word])
 
     else:
-        result = "I couldn't understand you request. Please read below on tips for "
-        result += "my usage.\n\n" + keywords.generate_help_docs(my_name, teams)
+        result = "I couldn't understand your request. Please see [here]"
+        result += "(https://www.reddit.com/r/NHL_Stats/comments/5oy9e9/bot_usage/dcmykfk/)"
+        result += " for tips.\n\n"
         return result
 
 def read_all_messages(r, args, teams):
