@@ -93,7 +93,7 @@ def handle_message_request(words, teams, my_name):
     division_keywords = keywords.get_division_words()['words']
     roster_keywords = keywords.get_roster_words()['words']
     sidebar_keywords = keywords.get_sidebar_words()['words']
-    stat_type_keywords = keywords.get_stat_type_words()['words']
+    stat_type_keywords = [w.lower() for w in keywords.get_stat_type_words()['words']]
     projection_keywords = keywords.get_projection_words()['words']
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
@@ -161,7 +161,7 @@ def read_all_messages(r, args, teams):
         words = get_words(message)
         username = words.pop(0)
         requester = message.author
-
+        
         #check if adhering to standard, if not scrap the message
         #do not display error message for what is assumed not to be a request
         if username != '/u/' + args.bot_name.lower():

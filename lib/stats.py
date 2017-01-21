@@ -2,6 +2,21 @@ from operator import itemgetter
 import urllib2
 import json
 
+from res import keywords
+
+# makes sure the stat requested is in the proper format before the search
+def set_case(lower_stat):
+    stat = lower_stat
+    
+    stats = keywords.get_stat_type_words()['words']
+
+    for listing in stats:
+        if lower_stat == listing.lower():
+            stat = listing
+            break
+    
+    return stat
+
 def get_team_stats(team, year="20162017"):
     """Returns a certain teams stats for a certain year, or default this year"""
     try:
@@ -27,6 +42,8 @@ def get_certain_stat_leader(stat_requested, year="20162017", cache=None,  team=N
 
     leader_list = []
     players = cache
+
+    stat_requested = set_case(stat_requested)
 
     if not cache and team:
         players = get_team_stats(team)
