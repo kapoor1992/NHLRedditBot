@@ -164,9 +164,9 @@ def read_all_messages(r, args, teams):
         
         #check if adhering to standard, if not scrap the message
         #do not display error message for what is assumed not to be a request
-        if username != '/u/' + args.bot_name.lower():
+        if 'u/' + args.bot_name.lower() not in username:
             message.mark_as_read()
-            continue;
+            continue
 
         #since we adhere to standard message, try to decipher what the message is requesting for unblacklisted requesters.
         if requester not in blacklist:
