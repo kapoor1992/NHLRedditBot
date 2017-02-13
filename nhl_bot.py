@@ -209,9 +209,15 @@ def main():
     teams = keywords.generate_teams()
 
     while True:
-        read_all_messages(r, args, teams)
-        print "sleeping"
-        sleep(60)
+        try:
+            read_all_messages(r, args, teams)
+            print "sleeping"
+            sleep(60)
+        except Exception, e:
+            print "exception occurred in main loop:"
+            print str(e)
+            sleep(300)
+            pass
 
 
 if __name__ == '__main__':
