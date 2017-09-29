@@ -1,6 +1,7 @@
-import division
-import schedule
-import stats
+from . import division
+from . import schedule
+from . import stats
+
 from datetime import datetime
 from dateutil import tz
 

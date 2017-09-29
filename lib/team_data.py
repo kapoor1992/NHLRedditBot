@@ -1,9 +1,9 @@
 import json
-import urllib2
+from urllib.request import urlopen
 
 def get_response(team):
     try:
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team))
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team))
         data = json.load(data)
         team = data['teams'][0]
 
@@ -17,8 +17,8 @@ def get_response(team):
         response += "[For more team info click here](" + team['officialSiteUrl'] + ")\n\n"
         return response
         
-    except Exception, e:
-        print ""
-        print "exception occured in team_data.get_response:"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occured in team_data.get_response:")
+        print (str(e))
         return None

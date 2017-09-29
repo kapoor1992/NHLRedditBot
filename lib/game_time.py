@@ -1,7 +1,7 @@
 import datetime
 from dateutil import tz
 import json
-import urllib2
+from urllib.request import urlopen
 
 def get_today():
     date = datetime.date.today()
@@ -65,7 +65,7 @@ def get_response(team):
         start = format_date(curr_day, curr_month, curr_year)
         end   = format_date(next_day, next_month, next_year)
         
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/schedule?startDate=" + start + "&endDate=" + end + "&teamId=" + str(team))
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/schedule?startDate=" + start + "&endDate=" + end + "&teamId=" + str(team))
         data = json.load(data)
 
         response = 'No game found.\n\n'
@@ -93,8 +93,8 @@ def get_response(team):
         
         return response
         
-    except Exception, e:
-        print ""
-        print "exception occured in game_time.get_response:"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occured in game_time.get_response:")
+        print (str(e))
         return None

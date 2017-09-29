@@ -1,9 +1,11 @@
 import json
-import urllib2
+from urllib.request import urlopen
+from .support import get_current_hockey_year
 
-def get_info(team):
+def get_info(team, year=get_current_hockey_year()):
+
     try:
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/standings")
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/standings?season=%s" % year)
         data = json.load(data)
 
         highlight = -1
@@ -26,10 +28,10 @@ def get_info(team):
 
         return highlight, ranks, names, games, points
 
-    except Exception, e:
-        print ""
-        print "exception occurred in standings.get_lists:"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occurred in standings.get_lists:")
+        print (str(e))
         return None
 
 def get_response(team):
@@ -52,8 +54,8 @@ def get_response(team):
         
         return response
 
-    except Exception, e:
-        print ""
-        print "exception occurred in standings.get_response:"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occurred in standings.get_response:")
+        print (str(e))
         return None
