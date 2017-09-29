@@ -141,8 +141,6 @@ def attempt_length_year_retreival(words):
             list_length = int(words[0])
             year = words[1]
 
-    print ("len %s year %s " % (list_length, year))
-
     return list_length, str(year)
 
 def handle_message_request(words, teams):
