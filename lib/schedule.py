@@ -1,23 +1,29 @@
-import urllib2
+from urllib.request import urlopen
 import json
 from datetime import timedelta, datetime
+from .support import *
 
-def get_regular_games(team, start_date="2016-10-01", end_date="2017-04-20"):
+def get_regular_games(team, start_date=None, end_date=None):
     """Default return all games for 16/17 season
 
     returns a list of objects that are games
     """
 
+    if start_date == None:
+        start_date = get_current_year() + "-10-01"
+    if end_date == None:
+        end_date = get_next_year() + "-04-20"
+
     try:
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/schedule?site=en_nhlCA&expand=schedule.teams,schedule.linescore,schedule.broadcasts.all&startDate=" + start_date + "&endDate=" + end_date + "&teamId=" + str(team))
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/schedule?site=en_nhlCA&expand=schedule.teams,schedule.linescore,schedule.broadcasts.all&startDate=" + start_date + "&endDate=" + end_date + "&teamId=" + str(team))
         data = json.load(data)
 
         return data['dates']
         
-    except Exception, e:
-        print ""
-        print "exception occurred in schedule.get_all_regular_games"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occurred in schedule.get_all_regular_games")
+        print (str(e))
         return None
 
 def generate_date(date):
@@ -33,7 +39,6 @@ def date_finder(x):
     return delta
 
 def get_closest_date(games):
-
     if len(games) == 1:
         return 0
     if len(games) == 0:
@@ -70,7 +75,7 @@ def get_games_around_date(games_before, games_after, date, cache=None, team=None
     if index_closest_date != None:
 
         #add old games first 
-        for x in xrange(games_before):
+        for x in range(games_before):
             # -1 due to list being [0, .., games_before -1]. sneaky trick. bound check
             if index_closest_date - x - 1 >= 0:
                 date_list.append(games[index_closest_date - x - 1])
@@ -84,7 +89,7 @@ def get_games_around_date(games_before, games_after, date, cache=None, team=None
         date_list.append(games[index_closest_date])
 
         #get future games
-        for x in xrange(games_after - 1):
+        for x in range(games_after - 1):
             # +1 due to list being [0, .., games_after -1]. sneaky trick. bounc check
             if index_closest_date + x + 1 < len(games):
                 date_list.append(games[index_closest_date + x + 1])

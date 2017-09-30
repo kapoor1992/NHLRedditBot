@@ -1,8 +1,9 @@
 from operator import itemgetter
-import urllib2
+from urllib.request import urlopen
 import json
 
-from res import keywords
+from .support import get_current_hockey_year
+from .res import keywords
 
 # makes sure the stat requested is in the proper format before the search
 def set_case(lower_stat):
@@ -17,21 +18,21 @@ def set_case(lower_stat):
     
     return stat
 
-def get_team_stats(team, year="20162017"):
+def get_team_stats(team, year=get_current_hockey_year()):
     """Returns a certain teams stats for a certain year, or default this year"""
     try:
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.roster,roster.person,person.stats&stats=yearByYear&season=" + year)
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.roster,roster.person,person.stats&stats=yearByYear&season=" + year)
         data = json.load(data)
 
         return data['teams'][0]['roster']['roster']
         
-    except Exception, e:
-        print ""
-        print "exception occurred in stats.get_team_stats"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occurred in stats.get_team_stats")
+        print (str(e))
         return None
 
-def get_certain_stat_leader(stat_requested, year="20162017", cache=None,  team=None):
+def get_certain_stat_leader(stat_requested, year=get_current_hockey_year(), cache=None,  team=None):
     """Takes a particular stat requested and returns an ordered list of dict of the leaders.
 
     cache - used to bring down the # of JSON calls when collecting multiple stats from the same team.
@@ -73,7 +74,10 @@ def get_certain_stat_leader(stat_requested, year="20162017", cache=None,  team=N
 
     return leader_list
 
-def get_response(stat, team, length=None, year="20162017"):
+def get_response(stat, team, length=None, year=get_current_hockey_year()):
 
-    # [:None] returns full list
+    if year == None:
+        year = get_current_hockey_year()
+
+    # [:None] returns full list. #pythonmagicyouwishyouknew
     return get_certain_stat_leader(stat, year=year, team=team)[:length]

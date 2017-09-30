@@ -1,12 +1,13 @@
-import urllib2
+from urllib.request import urlopen
+import traceback
 
-def getIdentifiers(lines):
+def get_identifiers(lines):
     identifiers = []
 
     for line in lines:
-        if "carousel__item--" in line:
+        if "carousel__item--" in str(line):
             identifier = ''
-            for char in line:
+            for char in str(line):
                 if char.isdigit():
                     identifier += char
                 elif identifier != '':
@@ -15,14 +16,14 @@ def getIdentifiers(lines):
 
     return identifiers
 
-def getNames(lines):
+def get_names(lines):
     names = []
 
     for line in lines:
-        if "video-preview__blurb" in line:
+        if "video-preview__blurb" in str(line):
             copy = False
             name = ''
-            for char in line:
+            for char in str(line):
                 if char == '>':
                     copy = True
                 elif (copy) & (char == '<'):
@@ -33,7 +34,7 @@ def getNames(lines):
 
     return names
 
-def getPages(identifiers, team):
+def get_pages(identifiers, team):
     pages = []
     
     for identifier in identifiers:
@@ -42,16 +43,16 @@ def getPages(identifiers, team):
 
     return pages
 
-def getLinks(pages):
+def get_links(pages):
     links = []
     
     for page in pages:
-        data = urllib2.urlopen(page)
+        data = urlopen(page)
         lines = data.readlines()
         for line in lines:
-            if '"contentURL" content="' in line:
+            if '"contentURL" content="' in str(line):
                 link = ''
-                for char in line:
+                for char in str(line):
                     if char == 'h':
                         link += char
                     elif (link != '') & (char == '"'):
@@ -63,26 +64,25 @@ def getLinks(pages):
 
     return links
 
-def getVideos(lines, team):
-    identifiers = getIdentifiers(lines)
-    pages = getPages(identifiers, team)
-    videos = getLinks(pages)
+def get_videos(lines, team):
+    identifiers = get_identifiers(lines)
+    pages = get_pages(identifiers, team)
+    videos = get_links(pages)
 
     return videos
 
 def get_response(team):
 
     try:
-        data = urllib2.urlopen("https://www.nhl.com/" + team + "/video/")
-        lines = data.readlines()
+        lines = urlopen("https://www.nhl.com/" + team + "/video/").readlines()
 
-        videos = getVideos(lines, team)
-        names = getNames(lines)
+        videos = get_videos(lines, team)
+        names = get_names(lines)
         return create_response(names, videos)
-    except Exception, e:
-        print ""
-        print "exception occured in videos.get_response:"
-        print str(e)
+    except Exception as e:
+        print ("exception occured in videos.get_response:")
+        print (str(e))
+        print (traceback.print_exc())
         return None
 
 def create_response(names, videos):

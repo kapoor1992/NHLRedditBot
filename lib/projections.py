@@ -1,11 +1,11 @@
 import json
-import urllib2
+from urllib.request import urlopen
 
 def get_response(team):
     total_games = 82
     
     try:
-        data = urllib2.urlopen("https://statsapi.web.nhl.com/api/v1/standings")
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/standings")
         data = json.load(data)
 
         response = ''
@@ -22,10 +22,10 @@ def get_response(team):
                      losses = record['leagueRecord']['losses']
                      ot     = record['leagueRecord']['ot']
 
-                     proj_points = points * total_games / games_played
-                     proj_wins   = wins * total_games / games_played
-                     proj_losses = losses * total_games / games_played
-                     proj_ot     = ot * total_games / games_played
+                     proj_points = int(points * total_games / games_played)
+                     proj_wins   = int(wins * total_games / games_played)
+                     proj_losses = int(losses * total_games / games_played)
+                     proj_ot     = int(ot * total_games / games_played)
 
                      response += "Name | Projection"
                      response += "\n---|---\n"
@@ -38,8 +38,8 @@ def get_response(team):
         if (response == ''):
             raise LookupError("Team not found")
     
-    except Exception, e:
-        print ""
-        print "exception occured in projections.get_response:"
-        print str(e)
+    except Exception as e:
+        print ("")
+        print ("exception occured in projections.get_response:")
+        print(str(e))
         return None
