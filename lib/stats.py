@@ -2,7 +2,7 @@ from operator import itemgetter
 from urllib.request import urlopen
 import json
 
-from .support import get_current_hockey_year
+from .support import get_current_hockey_year, get_next_year
 from .res import keywords
 
 # makes sure the stat requested is in the proper format before the search
@@ -74,10 +74,67 @@ def get_certain_stat_leader(stat_requested, year=get_current_hockey_year(), cach
 
     return leader_list
 
-def get_response(stat, team, length=None, year=get_current_hockey_year()):
+def make_chart(items, stat, year):
+    """Returns the stats chart for reddit"""
 
-    if year == None:
-        year = get_current_hockey_year()
+    # break the year into a human readable year frame
+    year = year[:4] + "-" + year[4:]
+    result = year + " season  \n\n"
+    result += "|Player|" + stat.title() + "|\n"
+    result += "|:--:|:--:|\n"
+
+    for item in items:
+        result += item['name'] + "|"
+        result += str(item['stat']) + "|\n"
+    result += "\n\n"
+
+    return result
+
+def attempt_length_year_retreival(words):
+    """This will take the remaing words in the list and try to figure out if it is a 
+    top 5 request, or a 20XX year request, or both.remaining_words
+    """
+    year = get_current_hockey_year()
+    list_length = None
+
+    # if there are no words, return nothing for both
+    if len(words) == 0:
+        return list_length, year
+
+    elif len(words) == 1:
+        # 1917 is the first year the NHL was around. assume full year
+        if words[0].isdigit() and int(words[0]) > 19171918:
+            year = words[0]
+
+        # if they type a single year, transform it into the API required two year format
+        #     Eg. 2015 requested, transform to "20152016"
+        elif words[0].isdigit() and int(words[0]) > 1917 and len(words[0]) == 4:
+            year = str(words[0]) + get_next_year(words[0])
+
+        else:
+            list_length = int(words[0])
+    elif len(words) >= 2:
+        # TODO: refactor this and above code to remove redundant software
+        # 1917 is the first year the NHL was around
+        if words[0].isdigit() and int(words[0]) > 19171918:
+            year = words[0]
+            list_length = int(words[1])
+        else:
+            list_length = int(words[0])
+            year = words[1]
+
+    return list_length, str(year)
+
+
+def get_response(team, words):
+
+    # get the stat
+    stat = words.pop(0)
+
+    # attempt to pull the year and list length (if applicable)
+    length, year = attempt_length_year_retreival(words)  # list() makes a copy of the list
 
     # [:None] returns full list. #pythonmagicyouwishyouknew
-    return get_certain_stat_leader(stat, year=year, team=team)[:length]
+    players = get_certain_stat_leader(stat, year=year, team=team)[:length]
+
+    return make_chart(players, stat, year)

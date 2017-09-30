@@ -60,17 +60,6 @@ def get_words(message):
         words[i] = words[i].lower()
     return words
 
-def make_chart(items, stat):
-    result = "|Player|" + stat + "|\n"
-    result += "|:--:|:--:|\n"
-
-    for item in items:
-        result += item['name'] + "|"
-        result += str(item['stat']) + "|\n"
-    result += "\n\n"
-
-    return result
-
 def check_valid_team(words, teams):
     """Takes a list of words, and a list of teams and returns the team, and the list of remaining words."""
 
@@ -110,38 +99,6 @@ def bot_failed_comprehension():
     result += "(https://www.reddit.com/r/NHL_Stats/comments/5oy9e9/bot_usage/dcmykfk/) "
     result += "for tips.\n\n"
     return result
-
-def attempt_length_year_retreival(words):
-    """This will take the remaing words in the list and try to figure out if it is a 
-    top 5 request, or a 20XX year request, or both.remaining_words
-    """
-
-    words.pop(0)
-
-    year = None
-    list_length = None
-
-    # if there are no words, return nothing for both
-    if len(words) == 0:
-        return list_length, year
-
-    elif len(words) == 1:
-        # 1917 is the first year the NHL was around
-        if words[0].isdigit() and int(words[0]) > 19171918:
-            year = words[0]
-        else:
-            list_length = int(words[0])
-    elif len(words) >= 2:
-        # TODO: refactor this and above code to remove redundant software
-        # 1917 is the first year the NHL was around
-        if words[0].isdigit() and int(words[0]) > 19171918:
-            year = words[0]
-            list_length = int(words[1])
-        else:
-            list_length = int(words[0])
-            year = words[1]
-
-    return list_length, str(year)
 
 def handle_message_request(words, teams):
     video_keywords = keywords.get_video_words()['words']
@@ -191,10 +148,7 @@ def handle_message_request(words, teams):
         return game_time.get_response(teams[team])
 
     elif team and remaining_words[0] in stat_type_keywords:
-        length, year = attempt_length_year_retreival(list(remaining_words))  # list() makes a copy of the list
-
-        players = stats.get_response(remaining_words[0], teams[team], length=length, year=year)
-        return make_chart(players, remaining_words[0])
+        return stats.get_response(teams[team], list(remaining_words))
 
     else:
         return bot_failed_comprehension()
