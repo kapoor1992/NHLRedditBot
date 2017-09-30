@@ -168,7 +168,7 @@ def handle_message_request(words, teams):
         else:
             return sidebar.get_response()
 
-    elif words[0] in help_keywords:
+    elif remaining_words[0] in help_keywords:
         return keywords.generate_help_docs(args.bot_name, teams)
 
     #otherwise find users request
