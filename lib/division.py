@@ -29,7 +29,10 @@ def get_rankings(division, year=get_current_hockey_year()):
             newTeam['points'] = team['points']
             newTeam['goalsAgainst'] = team['goalsAgainst']
             newTeam['goalsScored'] = team['goalsScored']
-            newTeam['streak'] = team['streak']['streakCode']
+            if 'streak' in team:
+                newTeam['streak'] = team['streak']['streakCode']
+            else:
+                newTeam['streak'] = "N/A"
             newTeam['divisionRank'] = team['divisionRank']
             newTeam['conferenceRank'] = team['conferenceRank']
             newTeam['leagueRank'] = team['leagueRank']

@@ -24,7 +24,7 @@ def generate_teams():
         data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/")
         data = json.load(data)
     except:
-        with open('teams.json') as data_file:
+        with open('./lib/res/teams.json') as data_file:
             data = json.load(data_file)
     teams = data['teams']
 
@@ -61,12 +61,12 @@ def get_conference_words():
     return generate_keywords_object(words, description)
 
 def get_division_words():
-    words = ["division"]
+    words = ["div", "division"]
     description = "returns standings for certain divisions"
     return generate_keywords_object(words, description)
     
 def get_roster_words():
-    words = ["roster", "players", "skaters"]
+    words = ["roster", "players", "skaters", "tenders", "tendies", "goalies", "goaltenders"]
     description = "retrieves the requested teams list of players"
     return generate_keywords_object(words, description)
 

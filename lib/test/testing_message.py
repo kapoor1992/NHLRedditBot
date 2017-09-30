@@ -14,7 +14,7 @@ class Testing_Message:
 
     def reply(self, reply):
         self.result = reply
-        print ("result: " + str(self.result))
+        print ("result: \n" + str(self.result))
         return True
 
     def get_result(self):

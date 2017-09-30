@@ -173,7 +173,7 @@ def generate_stat_row(players, stat, stat_abbv, extra=None):
     tie = get_tie_count(leaders)
 
     if len(leaders) == 0:
-        result += "Something Happened"
+        result += "N/A)"
 
     #3 or more tied
     elif tie >= 3:

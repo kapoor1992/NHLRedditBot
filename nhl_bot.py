@@ -162,8 +162,8 @@ def handle_message_request(words, teams):
     if team == None or len(remaining_words) == 0:
         return None
 
-    if words[0] in sidebar_keywords:
-        if len(words) == 3:
+    if remaining_words[0] in sidebar_keywords:
+        if len(remaining_words) == 3:
             return sidebar.get_response(games_before=int(words[1]), games_after=int(words[2]))
         else:
             return sidebar.get_response()

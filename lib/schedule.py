@@ -10,9 +10,9 @@ def get_regular_games(team, start_date=None, end_date=None):
     """
 
     if start_date == None:
-        start_date = support.get_current_year() + "-10-01"
+        start_date = get_current_year() + "-10-01"
     if end_date == None:
-        start_date = support.get_next_year() + "-04-20"
+        end_date = get_next_year() + "-04-20"
 
     try:
         data = urlopen("https://statsapi.web.nhl.com/api/v1/schedule?site=en_nhlCA&expand=schedule.teams,schedule.linescore,schedule.broadcasts.all&startDate=" + start_date + "&endDate=" + end_date + "&teamId=" + str(team))
@@ -39,7 +39,6 @@ def date_finder(x):
     return delta
 
 def get_closest_date(games):
-
     if len(games) == 1:
         return 0
     if len(games) == 0:
