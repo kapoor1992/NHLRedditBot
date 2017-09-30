@@ -101,6 +101,7 @@ def bot_failed_comprehension():
     return result
 
 def handle_message_request(words, teams):
+    #TODO: stop generating the word list on EVERY bot reply.
     video_keywords = keywords.get_video_words()['words']
     team_keywords = keywords.get_team_words()['words']
     standings_keywords = keywords.get_standings_words()['words']
@@ -113,20 +114,21 @@ def handle_message_request(words, teams):
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
 
-    #attempt to pull team name
+    # first check if this is a generic call for help
+    if words[0] in help_keywords:
+        return keywords.generate_help_docs(args.bot_name, teams)
+
+    #attempt to pull team name and continue
     team, remaining_words = check_valid_team(words, teams)
 
     if team == None or len(remaining_words) == 0:
         return None
 
-    if remaining_words[0] in sidebar_keywords:
+    elif remaining_words[0] in sidebar_keywords:
         if len(remaining_words) == 3:
             return sidebar.get_response(games_before=int(words[1]), games_after=int(words[2]))
         else:
             return sidebar.get_response()
-
-    elif remaining_words[0] in help_keywords:
-        return keywords.generate_help_docs(args.bot_name, teams)
 
     #otherwise find users request
     elif team and remaining_words[0] in video_keywords:
