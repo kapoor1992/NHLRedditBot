@@ -1,6 +1,7 @@
 import datetime
-from dateutil import tz
 import json
+
+from dateutil import tz
 from urllib.request import urlopen
 
 def get_today():

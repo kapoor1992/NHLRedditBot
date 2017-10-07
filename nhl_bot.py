@@ -16,7 +16,6 @@ from lib.res import keywords
 from lib.test import testing_message
 from lib.support import bot_failed_comprehension
 
-blacklist = []
 args = None
 
 def get_web_code(r):
@@ -145,7 +144,6 @@ def handle_message_request(words, teams):
         return bot_failed_comprehension()
 
 def manage_message(message):
-    global blacklist
     global args
 
     response = None
@@ -163,20 +161,17 @@ def manage_message(message):
     if 'u/nhl_stats' not in username.lower():
         message.mark_as_read()
         return api_calls
+
     requester = message.author
 
-    # since we adhere to standard message, try to decipher what the message is requesting for unblacklisted requesters.
-    if requester not in blacklist:
-        response = handle_message_request(words, teams)
+    # since we adhere to standard message, try to decipher what the message is requesting 
+    response = handle_message_request(words, teams)
 
-        if not response:
-            response = bot_failed_comprehension()
+    if not response:
+        response = bot_failed_comprehension()
 
-        message.reply(response + add_dad())
-        api_calls += 1
-
-        # add requester to temporary blacklist
-        blacklist.append(requester)
+    message.reply(response + add_dad())
+    api_calls += 1
 
     if not args.read:
         message.mark_as_read()
@@ -198,9 +193,6 @@ def read_all_messages(r):
 
     for message in messages:
         api_calls += manage_message(message)
-
-    global blacklist
-    blacklist = []
 
 def get_manual_test_string():
     """Prompts user for a manual entry and strips any accidental white space """
@@ -229,8 +221,6 @@ def start_test_mode():
 
         test_string = get_manual_test_string()
 
-        global blacklist
-        blacklist = []
     print ("Done testing...")
     sys.exit()
 
@@ -260,6 +250,7 @@ def main():
     while True:
         try:
             read_all_messages(r)
+
             print ("sleeping")
             sleep(60)
         except Exception as e:
@@ -267,7 +258,6 @@ def main():
             print (str(e))
             sleep(300)
             pass
-
 
 if __name__ == '__main__':
     main()
