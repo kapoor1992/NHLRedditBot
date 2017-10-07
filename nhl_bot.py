@@ -14,6 +14,7 @@ from lib import game_time
 from lib.res import keywords
 
 from lib.test import testing_message
+from lib.support import bot_failed_comprehension
 
 blacklist = []
 args = None
@@ -49,11 +50,10 @@ def handle_reddit_auth(r):
     r.set_access_credentials(**access_information)
 
 def add_dad():
-
-    # fill in reddit account name for contact
     return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^my ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
 
 def get_words(message):
+    """takes the message received, removes any weird whitespace and turns everything into lower case"""
     words = message.body.strip().split(" ")
 
     for i in range(len(words)):
@@ -90,16 +90,6 @@ def check_valid_team(words, teams):
 
     return None, words
 
-def bot_failed_comprehension():
-    """returns the basic failure message for not understanding a users request.remaining_words
-    This can be due to a type, incorrect order of opertations, or something else.
-    """
-
-    result = "I couldn't understand your request. Please see [here]"
-    result += "(https://www.reddit.com/r/NHL_Stats/comments/5oy9e9/bot_usage/dcmykfk/) "
-    result += "for tips.\n\n"
-    return result
-
 def handle_message_request(words, teams):
     video_keywords = keywords.get_video_words()['words']
     team_keywords = keywords.get_team_words()['words']
@@ -108,7 +98,6 @@ def handle_message_request(words, teams):
     division_keywords = keywords.get_division_words()['words']
     roster_keywords = keywords.get_roster_words()['words']
     sidebar_keywords = keywords.get_sidebar_words()['words']
-    stat_type_keywords = [w.lower() for w in keywords.get_stat_type_words()['words']]
     projection_keywords = keywords.get_projection_words()['words']
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
@@ -147,7 +136,7 @@ def handle_message_request(words, teams):
     elif team and remaining_words[0] in game_time_keywords:
         return game_time.get_response(teams[team])
 
-    elif team and remaining_words[0] in stat_type_keywords:
+    elif team and stats.is_sentence_a_stat_request(remaining_words):
         return stats.get_response(teams[team], list(remaining_words))
 
     else:
@@ -165,7 +154,13 @@ def manage_message(message):
     #let's force the users to mentioned us as first thing in a comment, any further words are 
     #   features and/or specific requests.
     words = get_words(message)
-    words.pop(0) # pop the username off the stack, we dont even need to error check it
+    username = words.pop(0)
+
+    # if the username is not the first word, ignore this message (reply to our comment?)
+    # /u/nhl_stats included in this list.
+    if 'u/nhl_stats' not in username.lower():
+        message.mark_as_read()
+        return api_calls
     requester = message.author
 
     # since we adhere to standard message, try to decipher what the message is requesting for unblacklisted requesters.
@@ -207,9 +202,14 @@ def read_all_messages(r):
 
 def get_manual_test_string():
     """Prompts user for a manual entry and strips any accidental white space """
+    test_string = ""
+    while test_string == "":
+        test_string = input("String to test (type 'q' to exit): ")
+        test_string = test_string.strip()
 
-    test_string = input("String to test (type 'q' to exit): ")
-    return test_string.strip()
+        if test_string == "":
+            print ("Error: You must provide some input for the system to reply.")
+    return test_string
 
 
 def start_test_mode():
@@ -220,7 +220,7 @@ def start_test_mode():
     test_string = get_manual_test_string()
 
     while test_string != "q":
-        test_string = "<username_holder> " + test_string  # a hack to get aroud username requirment
+        test_string = args.bot_name + " " + test_string  # mimic a reddit comment requester
         new_message = testing_message.Testing_Message(test_string)
         manage_message(testing_message.Testing_Message(test_string))
         print(new_message.get_result())
