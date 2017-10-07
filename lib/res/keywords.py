@@ -145,12 +145,12 @@ def get_stat_type_words_english():
     word_lookup["assist"] = "assists"
     word_lookup["assists"] = "assists"
 
-
     word_lookup["g"] = "goals"
     word_lookup["goal"] = "goals"
     word_lookup["goals"] = "goals"
 
     word_lookup["pim"] = "pim"
+    word_lookup["pims"] = "pim"
     word_lookup["penaltys"] = "pim"
     word_lookup["penalties"] = "pim"
     word_lookup["penalty minutes"] = "pim"
@@ -179,10 +179,12 @@ def get_stat_type_words_english():
     word_lookup["pptoi"] = "powerPlayTimeOnIce"
     word_lookup["powerplaytimeonice"] = "powerPlayTimeOnIce"
     word_lookup["power play time on ice"] = "powerPlayTimeOnIce"
+    word_lookup["power play toi"] = "powerPlayTimeOnIce"
 
     word_lookup["etoi"] = "evenTimeOnIce"
     word_lookup["eventimeonice"] = "evenTimeOnIce"
     word_lookup["even time on ice"] = "evenTimeOnIce"
+    word_lookup["even toi"] = "evenTimeOnIce"
 
     word_lookup["f%"] = "faceOffPct"
     word_lookup["fo%"] = "faceOffPct"
@@ -258,8 +260,8 @@ def get_stat_type_words_english():
 
     word_lookup["gaa"] = "goalAgainstAverage"
     word_lookup["goalsagainstaverage"] = "goalAgainstAverage"
+    word_lookup["goal against average"] = "goalAgainstAverage"
     word_lookup["goals against average"] = "goalAgainstAverage"
-    word_lookup["goals against"] = "goalAgainstAverage"
     word_lookup["goal"] = "goalAgainstAverage"
 
     word_lookup["ga"] = "goalsAgainst"
@@ -320,6 +322,7 @@ def get_stat_type_words_english():
     word_lookup["ppsp"] = "powerPlaySavePercentage"
 
     word_lookup["shsp"] = "shortHandedSavePercentage"
+    word_lookup["shs%"] = "shortHandedSavePercentage"
     word_lookup["shorthandedsavepercentage"] = "shortHandedSavePercentage"
     word_lookup["short handed save percentage"] = "shortHandedSavePercentage"
     word_lookup["short hand save percentage"] = "shortHandedSavePercentage"
