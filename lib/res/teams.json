@@ -1,5 +1,5 @@
 {
-  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2016. All Rights Reserved.",
+  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2017. All Rights Reserved.",
   "teams" : [ {
     "id" : 1,
     "name" : "New Jersey Devils",
@@ -15,7 +15,6 @@
       }
     },
     "abbreviation" : "NJD",
-    "triCode" : "NJD",
     "teamName" : "Devils",
     "locationName" : "New Jersey",
     "firstYearOfPlay" : "1982",
@@ -35,7 +34,7 @@
       "link" : "/api/v1/franchises/23"
     },
     "shortName" : "New Jersey",
-    "officialSiteUrl" : "http://www.newjerseydevils.com",
+    "officialSiteUrl" : "http://www.truesince82.com",
     "franchiseId" : 23,
     "active" : true
   }, {
@@ -53,7 +52,6 @@
       }
     },
     "abbreviation" : "NYI",
-    "triCode" : "NYI",
     "teamName" : "Islanders",
     "locationName" : "New York",
     "firstYearOfPlay" : "1972",
@@ -91,7 +89,6 @@
       }
     },
     "abbreviation" : "NYR",
-    "triCode" : "NYR",
     "teamName" : "Rangers",
     "locationName" : "New York",
     "firstYearOfPlay" : "1926",
@@ -129,7 +126,6 @@
       }
     },
     "abbreviation" : "PHI",
-    "triCode" : "PHI",
     "teamName" : "Flyers",
     "locationName" : "Philadelphia",
     "firstYearOfPlay" : "1967",
@@ -157,7 +153,7 @@
     "name" : "Pittsburgh Penguins",
     "link" : "/api/v1/teams/5",
     "venue" : {
-      "name" : "PPG PAINTS Arena",
+      "name" : "PPG Paints Arena",
       "link" : "/api/v1/venues/null",
       "city" : "Pittsburgh",
       "timeZone" : {
@@ -167,7 +163,6 @@
       }
     },
     "abbreviation" : "PIT",
-    "triCode" : "PIT",
     "teamName" : "Penguins",
     "locationName" : "Pittsburgh",
     "firstYearOfPlay" : "1967",
@@ -205,7 +200,6 @@
       }
     },
     "abbreviation" : "BOS",
-    "triCode" : "BOS",
     "teamName" : "Bruins",
     "locationName" : "Boston",
     "firstYearOfPlay" : "1924",
@@ -233,7 +227,7 @@
     "name" : "Buffalo Sabres",
     "link" : "/api/v1/teams/7",
     "venue" : {
-      "name" : "First Niagara Center",
+      "name" : "KeyBank Center",
       "link" : "/api/v1/venues/null",
       "city" : "Buffalo",
       "timeZone" : {
@@ -243,7 +237,6 @@
       }
     },
     "abbreviation" : "BUF",
-    "triCode" : "BUF",
     "teamName" : "Sabres",
     "locationName" : "Buffalo",
     "firstYearOfPlay" : "1970",
@@ -281,7 +274,6 @@
       }
     },
     "abbreviation" : "MTL",
-    "triCode" : "MTL",
     "teamName" : "Canadiens",
     "locationName" : "Montréal",
     "firstYearOfPlay" : "1909",
@@ -319,7 +311,6 @@
       }
     },
     "abbreviation" : "OTT",
-    "triCode" : "OTT",
     "teamName" : "Senators",
     "locationName" : "Ottawa",
     "firstYearOfPlay" : "1990",
@@ -357,7 +348,6 @@
       }
     },
     "abbreviation" : "TOR",
-    "triCode" : "TOR",
     "teamName" : "Maple Leafs",
     "locationName" : "Toronto",
     "firstYearOfPlay" : "1917",
@@ -395,7 +385,6 @@
       }
     },
     "abbreviation" : "CAR",
-    "triCode" : "CAR",
     "teamName" : "Hurricanes",
     "locationName" : "Carolina",
     "firstYearOfPlay" : "1979",
@@ -433,7 +422,6 @@
       }
     },
     "abbreviation" : "FLA",
-    "triCode" : "FLA",
     "teamName" : "Panthers",
     "locationName" : "Florida",
     "firstYearOfPlay" : "1993",
@@ -471,7 +459,6 @@
       }
     },
     "abbreviation" : "TBL",
-    "triCode" : "TBL",
     "teamName" : "Lightning",
     "locationName" : "Tampa Bay",
     "firstYearOfPlay" : "1991",
@@ -499,7 +486,7 @@
     "name" : "Washington Capitals",
     "link" : "/api/v1/teams/15",
     "venue" : {
-      "name" : "Verizon Center",
+      "name" : "Capital One Arena",
       "link" : "/api/v1/venues/null",
       "city" : "Washington",
       "timeZone" : {
@@ -509,7 +496,6 @@
       }
     },
     "abbreviation" : "WSH",
-    "triCode" : "WSH",
     "teamName" : "Capitals",
     "locationName" : "Washington",
     "firstYearOfPlay" : "1974",
@@ -547,7 +533,6 @@
       }
     },
     "abbreviation" : "CHI",
-    "triCode" : "CHI",
     "teamName" : "Blackhawks",
     "locationName" : "Chicago",
     "firstYearOfPlay" : "1926",
@@ -575,7 +560,7 @@
     "name" : "Detroit Red Wings",
     "link" : "/api/v1/teams/17",
     "venue" : {
-      "name" : "Joe Louis Arena",
+      "name" : "Little Caesars Arena",
       "link" : "/api/v1/venues/null",
       "city" : "Detroit",
       "timeZone" : {
@@ -585,7 +570,6 @@
       }
     },
     "abbreviation" : "DET",
-    "triCode" : "DET",
     "teamName" : "Red Wings",
     "locationName" : "Detroit",
     "firstYearOfPlay" : "1926",
@@ -623,7 +607,6 @@
       }
     },
     "abbreviation" : "NSH",
-    "triCode" : "NSH",
     "teamName" : "Predators",
     "locationName" : "Nashville",
     "firstYearOfPlay" : "1997",
@@ -661,7 +644,6 @@
       }
     },
     "abbreviation" : "STL",
-    "triCode" : "STL",
     "teamName" : "Blues",
     "locationName" : "St. Louis",
     "firstYearOfPlay" : "1967",
@@ -699,7 +681,6 @@
       }
     },
     "abbreviation" : "CGY",
-    "triCode" : "CGY",
     "teamName" : "Flames",
     "locationName" : "Calgary",
     "firstYearOfPlay" : "1980",
@@ -737,7 +718,6 @@
       }
     },
     "abbreviation" : "COL",
-    "triCode" : "COL",
     "teamName" : "Avalanche",
     "locationName" : "Colorado",
     "firstYearOfPlay" : "1979",
@@ -775,7 +755,6 @@
       }
     },
     "abbreviation" : "EDM",
-    "triCode" : "EDM",
     "teamName" : "Oilers",
     "locationName" : "Edmonton",
     "firstYearOfPlay" : "1979",
@@ -813,7 +792,6 @@
       }
     },
     "abbreviation" : "VAN",
-    "triCode" : "VAN",
     "teamName" : "Canucks",
     "locationName" : "Vancouver",
     "firstYearOfPlay" : "1970",
@@ -851,7 +829,6 @@
       }
     },
     "abbreviation" : "ANA",
-    "triCode" : "ANA",
     "teamName" : "Ducks",
     "locationName" : "Anaheim",
     "firstYearOfPlay" : "1993",
@@ -889,7 +866,6 @@
       }
     },
     "abbreviation" : "DAL",
-    "triCode" : "DAL",
     "teamName" : "Stars",
     "locationName" : "Dallas",
     "firstYearOfPlay" : "1967",
@@ -927,7 +903,6 @@
       }
     },
     "abbreviation" : "LAK",
-    "triCode" : "LAK",
     "teamName" : "Kings",
     "locationName" : "Los Angeles",
     "firstYearOfPlay" : "1967",
@@ -965,7 +940,6 @@
       }
     },
     "abbreviation" : "SJS",
-    "triCode" : "SJS",
     "teamName" : "Sharks",
     "locationName" : "San Jose",
     "firstYearOfPlay" : "1990",
@@ -1003,7 +977,6 @@
       }
     },
     "abbreviation" : "CBJ",
-    "triCode" : "CBJ",
     "teamName" : "Blue Jackets",
     "locationName" : "Columbus",
     "firstYearOfPlay" : "1997",
@@ -1041,7 +1014,6 @@
       }
     },
     "abbreviation" : "MIN",
-    "triCode" : "MIN",
     "teamName" : "Wild",
     "locationName" : "Minnesota",
     "firstYearOfPlay" : "1997",
@@ -1069,7 +1041,7 @@
     "name" : "Winnipeg Jets",
     "link" : "/api/v1/teams/52",
     "venue" : {
-      "name" : "MTS Centre",
+      "name" : "Bell MTS Place",
       "link" : "/api/v1/venues/null",
       "city" : "Winnipeg",
       "timeZone" : {
@@ -1079,7 +1051,6 @@
       }
     },
     "abbreviation" : "WPG",
-    "triCode" : "WPG",
     "teamName" : "Jets",
     "locationName" : "Winnipeg",
     "firstYearOfPlay" : "2011",
@@ -1117,7 +1088,6 @@
       }
     },
     "abbreviation" : "ARI",
-    "triCode" : "ARI",
     "teamName" : "Coyotes",
     "locationName" : "Arizona",
     "firstYearOfPlay" : "1979",
@@ -1139,6 +1109,43 @@
     "shortName" : "Arizona",
     "officialSiteUrl" : "http://www.arizonacoyotes.com",
     "franchiseId" : 28,
+    "active" : true
+  }, {
+    "id" : 54,
+    "name" : "Vegas Golden Knights",
+    "link" : "/api/v1/teams/54",
+    "venue" : {
+      "name" : "T-Mobile Arena",
+      "link" : "/api/v1/venues/null",
+      "city" : "Las Vegas",
+      "timeZone" : {
+        "id" : "America/Los_Angeles",
+        "offset" : -7,
+        "tz" : "PDT"
+      }
+    },
+    "abbreviation" : "VGK",
+    "teamName" : "Golden Knights",
+    "locationName" : "Vegas",
+    "firstYearOfPlay" : "2016",
+    "division" : {
+      "id" : 15,
+      "name" : "Pacific",
+      "link" : "/api/v1/divisions/15"
+    },
+    "conference" : {
+      "id" : 5,
+      "name" : "Western",
+      "link" : "/api/v1/conferences/5"
+    },
+    "franchise" : {
+      "franchiseId" : 38,
+      "teamName" : "Golden Knights",
+      "link" : "/api/v1/franchises/38"
+    },
+    "shortName" : "Vegas",
+    "officialSiteUrl" : "http://www.vegasgoldenknights.com",
+    "franchiseId" : 38,
     "active" : true
   } ]
 }
