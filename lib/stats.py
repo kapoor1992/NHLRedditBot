@@ -92,7 +92,7 @@ def make_chart(items, stat, year):
     # break the year into a human readable year frame
     year = year[:4] + "-" + year[4:]
     result = year + " season  \n\n"
-    result += "|Player|" + stat.title() + "|\n"
+    result += "|Player|" + keywords.get_stat_english_word(stat) + "|\n"
     result += "|:--:|:--:|\n"
 
     for item in items:
@@ -161,7 +161,7 @@ def attempt_to_get_readable_stat(words):
     the word list passed into us.
     """
 
-    legal_words = keywords.get_stat_type_words_english()
+    legal_words = keywords.get_stat_from_english()
 
     # grab anything from our dict if it exists. Otherwise, 'None'
     return legal_words.get(" ".join(words))

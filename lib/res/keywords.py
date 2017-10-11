@@ -81,7 +81,7 @@ def generate_stat_helper_spiel():
 
     # list all the keys that lead to a value.
     words = {}
-    phrases = get_stat_type_words_english()
+    phrases = get_stat_from_english()
 
     # Eg. [g] = goals, [goal]=goals, [goals]=goals to now [goals] = [g, goal, goals]
     for key, value in phrases.items():
@@ -109,7 +109,7 @@ def get_stat_type_words():
 
     # list all the keys that lead to a value.
     words = []
-    phrases = get_stat_type_words_english()
+    phrases = get_stat_from_english()
 
     for key, value in phrases.items():
         if value not in words:
@@ -120,7 +120,56 @@ def get_stat_type_words():
     description += " Examples: jets goals 5 2015, jets goals 20152016, jets goals 2015 5  \n"
     return generate_keywords_object(words, description)
 
-def get_stat_type_words_english():
+def get_stat_english_word(stat):
+    """Will take the weirdly worded stat and return the appropriate english phrase."""
+
+    word_lookup = {}
+
+    word_lookup["timeOnIce"] = "Time On Ice"
+    word_lookup["assists"] = "Assists"
+    word_lookup["goals"] = "Goals"
+    word_lookup["pim"] = "Penality Minutes"
+    word_lookup["shots"] = "Shots"
+    word_lookup["games"] = "Games"
+    word_lookup["hits"] = "Hits"
+    word_lookup["powerPlayGoals"] = "Power Play Goals"
+    word_lookup["powerPlayPoints"] = "Power Play Points"
+    word_lookup["powerPlayTimeOnIce"] = "Power Play TOI"
+    word_lookup["evenTimeOnIce"] = "Even TOI"
+    word_lookup["faceOffPct"] = "Faceoff %"
+    word_lookup["shotPct"] = "Shot %"
+    word_lookup["gameWinningGoals"] = "Game Winning Goals"
+    word_lookup["overTimeGoals"] = "Overtime Goals"
+    word_lookup["shortHandedGoals"] = "Short Handed Goals"
+    word_lookup["shortHandedPoints"] = "Short Handed Points"
+    word_lookup["shortHandedTimeOnIce"] = "Short Handed TOI"
+    word_lookup["blocked"] = "Blocks"
+    word_lookup["plusMinus"] = "Plus/Minus"
+    word_lookup["points"] = "Points"
+    word_lookup["shifts"] = "Shifts"
+    word_lookup["ties"] = "Ties"
+    word_lookup["shutouts"] = "Shutouts"
+    word_lookup["wins"] = "Wins"
+    word_lookup["losses"] = "Losses"
+    word_lookup["goalAgainstAverage"] = "Goal Against Average"
+    word_lookup["goalsAgainst"] = "Goals Against"
+    word_lookup["saves"] = "Saves"
+    word_lookup["powerPlaySaves"] = "Power Play Saves"
+    word_lookup["shortHandedSaves"] = "Short Handed Saves"
+    word_lookup["evenSaves"] = "Even Strength Saves"
+    word_lookup["shortHandedShots"] = "Short Handed Shots"
+    word_lookup["evenShots"] = "Event Strength Shots"
+    word_lookup["powerPlayShots"] = "Power Play Shots"
+    word_lookup["savePercentage"] = "Save %"
+    word_lookup["gamesStarted"] = "Games Started"
+    word_lookup["shotsAgainst"] = "Shots Against"
+    word_lookup["powerPlaySavePercentage"] = "Power Play Save %"
+    word_lookup["shortHandedSavePercentage"] = "Short Handed Save %"
+    word_lookup["evenStrengthSavePercentage"] = "Even Strength Save %"
+
+    return word_lookup.get(stat)
+
+def get_stat_from_english():
     """The amout of times a new stat is added to hockey I'd imagine is pretty low,
     so this is hardcoded english translation.
 

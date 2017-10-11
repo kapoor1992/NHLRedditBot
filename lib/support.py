@@ -94,6 +94,6 @@ def bot_failed_comprehension(error_message=None):
         result += error_message + "\n"
 
     result += "Please see [here]"
-    result += "(https://www.reddit.com/r/NHL_Stats/comments/5oy9e9/bot_usage/dcmykfk/) "
+    result += "(https://www.reddit.com/r/NHL_Stats/comments/74skjv/bot_details/do0tjzz/) "
     result += "for tips on proper usage.\n\n"
     return result
