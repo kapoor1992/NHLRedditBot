@@ -81,7 +81,7 @@ def generate_stat_helper_spiel():
 
     # list all the keys that lead to a value.
     words = {}
-    phrases = get_stat_from_english()
+    phrases = get_stats_from_english()
 
     # Eg. [g] = goals, [goal]=goals, [goals]=goals to now [goals] = [g, goal, goals]
     for key, value in phrases.items():
@@ -109,7 +109,7 @@ def get_stat_type_words():
 
     # list all the keys that lead to a value.
     words = []
-    phrases = get_stat_from_english()
+    phrases = get_stats_from_english()
 
     for key, value in phrases.items():
         if value not in words:
@@ -125,6 +125,7 @@ def get_stat_english_word(stat):
 
     word_lookup = {}
 
+    # play stats
     word_lookup["timeOnIce"] = "Time On Ice"
     word_lookup["assists"] = "Assists"
     word_lookup["goals"] = "Goals"
@@ -166,10 +167,39 @@ def get_stat_english_word(stat):
     word_lookup["powerPlaySavePercentage"] = "Power Play Save %"
     word_lookup["shortHandedSavePercentage"] = "Short Handed Save %"
     word_lookup["evenStrengthSavePercentage"] = "Even Strength Save %"
+    word_lookup["gamesPlayed"] = "Games Played"
+
+    # team stats
+    word_lookup["ot"] = "Overtime"
+    word_lookup["pts"] = "Points"
+    word_lookup["ptPctg"] = "Point %"
+    word_lookup["goalsPerGame"] = "Goals/Game"
+    word_lookup["goalsAgainstPerGame"] = "Goals Against/Game"
+    word_lookup["evGGARatio"] = "Even Strength GAA Ratio"
+    word_lookup["powerPlayPercentage"] = "Power Play %"
+    word_lookup["powerPlayGoals"] = "Power Play Goals"
+    word_lookup["powerPlayGoalsAgainst"] = "Power Play Goals Against"
+    word_lookup["powerPlayOpportunities"] = "Power Play Opportunities"
+    word_lookup["penaltyKillPercentage"] = "Penalty Kill %"
+    word_lookup["shotsPerGame"] = "Shots/Game"
+    word_lookup["shotsAllowed"] = "Shots Allowed"
+    word_lookup["winScoreFirst"] = "Ratio Of Wins Scoring First"
+    word_lookup["winOppScoreFirst"] = "Ratio Of Wins With Opponents Scoring First"
+    word_lookup["winLeadFirstPer"] = "Ratio Of Wins With Lead In P1"
+    word_lookup["winLeadSecondPer"] = "Ratio Of Wins With Lead In P2"
+    word_lookup["winOutshootOpp"] = "Ratio Of Wins When Outshooting Opponents"
+    word_lookup["winOutshotByOpp"] = "Ratio Of Wins When Outshot By Opponents"
+    word_lookup["faceOffsTaken"] = "Total Faceoffs"
+    word_lookup["faceOffsWon"] = "Faceoffs Won"
+    word_lookup["faceOffsLost"] = "Faceoffs Lost"
+    word_lookup["faceOffWinPercentage"] = "Faceoff Win %"
+    word_lookup["shootingPctg"] = "Shooting %"
+    word_lookup["savePctg"] = "Save %"
+    word_lookup["penaltyKillOpportunities"] = "Penalty Kill Oportunities"
 
     return word_lookup.get(stat)
 
-def get_stat_from_english():
+def get_stats_from_english():
     """The amout of times a new stat is added to hockey I'd imagine is pretty low,
     so this is hardcoded english translation.
 
@@ -388,6 +418,10 @@ def get_stat_from_english():
     word_lookup["even strength save percentage"] = "evenStrengthSavePercentage"
     word_lookup["even strength save percent"] = "evenStrengthSavePercentage"
     word_lookup["even strength save %"] = "evenStrengthSavePercentage"
+
+    #Hack to allow team stat collection.
+    word_lookup["stats"] = "stats"
+    word_lookup["stat"] = "stats"
 
     return word_lookup
 

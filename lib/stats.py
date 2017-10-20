@@ -18,8 +18,75 @@ def set_case(lower_stat):
     
     return stat
 
+def create_team_stats_chart(stats, year):
+    """takes a teams stats and prints them pretty."""
+    if not stats:
+        return bot_failed_comprehension("I failed to retrive stats for the team you wantted. Sorry.")
+    # break the year into a human readable year frame
+
+    year = year[:4] + "-" + year[4:]
+    result = year + " season  \n\n"
+    result += "|Stat Name|Stat Value|Ranking|\n"
+    result += "|:--:|:--:|:--:|\n"
+
+    for stat in stats:
+        result += keywords.get_stat_english_word(stat) + "|" + stats[stat]['value'] + "|" + stats[stat]['place'] + "\n"
+    result += "\n\n"
+
+    return result
+
+def get_refined_team_stats(team, year=get_current_hockey_year()):
+    """formats a whole teams stats into a nicly readable and manageable way"""
+
+    data = get_team_stats(team, year=year)
+
+    #crete an easy to manage object based on string identifier
+    team_stats = {}
+
+    #go through numerical stats first
+    for stat in data[0]['stat']:
+        if stat not in team_stats:
+            team_stats[stat] = {'value': str(data[0]['stat'][stat]), 'place': "N/A"}
+
+    #now go through "placing" stats. Eg. "1st", "22nd", etc etc
+    for stat in data[1]['stat']:
+        #STUPID edge case for 0 and 1 data. The pairs are the same thing!!!
+
+        # "savePctg" : 0.9
+        # "shootingPctg" : 10.0
+
+        # "savePctRank" : "28th",    # wtf, where did the 'g' go?
+        # "shootingPctRank" : "6th"  # same here...
+        new_stat = stat
+        if stat == "savePctRank":
+            new_stat = "savePctg"
+        if stat == "shootingPctRank":
+            new_stat = "shootingPctg"
+
+        if new_stat not in team_stats:
+            team_stats[new_stat] = {'value': "N/A", 'place': str(data[1]['stat'][stat])}
+        else:
+            team_stats[new_stat]['place'] = str(data[1]['stat'][stat])
+    return team_stats
+
 def get_team_stats(team, year=get_current_hockey_year()):
     """Returns a certain teams stats for a certain year, or default this year"""
+
+    try:
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.stats&stats=yearByYear&season=" + year)
+        data = json.load(data)
+
+        return data['teams'][0]['teamStats'][0]['splits']
+        
+    except Exception as e:
+        print ("")
+        print ("exception occurred in stats.get_player_stats")
+        print (str(e))
+        return None
+
+
+def get_player_stats(team, year=get_current_hockey_year()):
+    """Returns a certain teams stats for a certain year, or default this year for the players"""
 
     try:
         data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.roster,roster.person,person.stats&stats=yearByYear&season=" + year)
@@ -29,7 +96,7 @@ def get_team_stats(team, year=get_current_hockey_year()):
         
     except Exception as e:
         print ("")
-        print ("exception occurred in stats.get_team_stats")
+        print ("exception occurred in stats.get_player_stats")
         print (str(e))
         return None
 
@@ -48,7 +115,7 @@ def get_certain_stat_leader(stat_requested, year=get_current_hockey_year(), cach
     stat_requested = set_case(stat_requested)
 
     if not cache and team:
-        players = get_team_stats(team, year=year)
+        players = get_player_stats(team, year=year)
 
     if not players:
         # check what kind of error occured and error message on it
@@ -132,9 +199,18 @@ def attempt_length_year_retreival(words):
         if words[0].isdigit() and int(words[0]) > 19171918:
             year = words[0]
             list_length = int(words[1])
-        else:
-            list_length = int(words[0])
+
+        elif words[0].isdigit() and int(words[0]) > 1917:
+            year = str(words[0]) + get_next_year(words[0])
+            list_length = int(words[1])
+
+        elif words[1].isdigit() and int(words[1]) > 19171918:
             year = words[1]
+            list_length = int(words[0])
+
+        elif words[1].isdigit() and int(words[1]) > 1917:
+            year = str(words[1]) + get_next_year(words[1])
+            list_length = int(words[0])
 
     return list_length, str(year)
 
@@ -161,7 +237,7 @@ def attempt_to_get_readable_stat(words):
     the word list passed into us.
     """
 
-    legal_words = keywords.get_stat_from_english()
+    legal_words = keywords.get_stats_from_english()
 
     # grab anything from our dict if it exists. Otherwise, 'None'
     return legal_words.get(" ".join(words))
@@ -173,6 +249,10 @@ def attempt_request_breakdown(words):
     Eg. 'jets gaa 2015' for 20152016 year goalsAginstAverage
     Eg. 'jets goals against average 2015' for goalsAgainstAverage 2015
     Eg. 'jets goal against average 2015' for goalsAgainstAverage 2015
+
+    Or even a team stat like:
+
+    Eg. 'jets stats' for all team stats
 
     Lots of grammar checking which results in intersting code
     """
@@ -207,11 +287,16 @@ def get_response(team, words):
     length = breakdown['length']
     year = breakdown['year']
 
-    # [:None] returns full list. #pythonmagicyouwishyouknew
-    players = get_certain_stat_leader(stat, year=year, team=team)[:length]
-
-    if isinstance(players, list):
-        return make_chart(players, stat, year)
-    # now contains an error code thing.
+    if stat != "stats":
+        # [:None] returns full list. #pythonmagicyouwishyouknew
+        players = get_certain_stat_leader(stat, year=year, team=team)[:length]
+        if isinstance(players, list):
+            return make_chart(players, stat, year)
     else:
-        return players
+        # [:None] returns full list. #pythonmagicyouwishyouknew
+        team_stats = get_refined_team_stats(team, year=year)
+        if isinstance(team_stats, dict):
+            return create_team_stats_chart(team_stats, year)
+
+    # now contains an error code thing.
+    return bot_failed_comprehension("Sorry, I failed to understand something in your request.")
