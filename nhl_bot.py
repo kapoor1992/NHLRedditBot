@@ -53,7 +53,14 @@ def add_dad():
 
 def get_words(message):
     """takes the message received, removes any weird whitespace and turns everything into lower case"""
-    words = message.body.strip().split(" ")
+
+    words = message.body.strip()
+
+    # strip an ending period if one exists.
+    if words[-1:] == ".":
+        words = words[:-1].strip()
+
+    words = words.split(" ")
 
     for i in range(len(words)):
         words[i] = words[i].lower()
@@ -81,11 +88,10 @@ def check_valid_team(words, teams):
     short_word_list = words[1:]     # "technically" a longer list
 
     #eg. "Jets"
-    if short_team in teams:
-        return short_team, short_word_list
-
-    elif long_team in teams:
+    if long_team in teams:
         return long_team, long_word_list
+    elif short_team in teams:
+        return short_team, short_word_list
 
     return None, words
 
@@ -176,9 +182,7 @@ def manage_message(message):
     if not args.read:
         message.mark_as_read()
 
-    # in an attempt to not get throttled, bail if we do 60 requests in this iteration.
-    if api_calls >= 60:
-        return api_calls
+    return api_calls
 
 def read_all_messages(r):
     response = None

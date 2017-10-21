@@ -17,8 +17,8 @@ def add_s(words):
     return new_list
 
 def generate_teams():
-    teams = None
     team_list = {}
+    teams = None
     data = None
 
     #try live, fallback file
@@ -32,13 +32,46 @@ def generate_teams():
 
     #iterate whole list and create dict of key team name and value id
     for team in teams:
-        # add every permutation possible
-        team_list[team['teamName']] = team['id']
+        # regular name
         team_list[team['teamName'].lower()] = team['id']
 
+        # no spaces
         new_team_name = team['teamName'].replace(" ", "")
-        team_list[new_team_name] = team['id']
         team_list[new_team_name.lower()] = team['id']
+
+        # abbv
+        team_list[team["abbreviation"].lower()] = team['id']
+
+        # half of a name. Ex. "maple" or more likely "leafs"
+        if " " in team['teamName']:
+            team_name_parts = team['teamName'].split()
+            for part in team_name_parts:
+                team_list[part.lower()] = team['id']
+
+        # check for special team nick names
+        if team['teamName'] == "Canadiens":
+            team_list["habs"] = team['id']
+        if team['teamName'] == "Predators":
+            team_list["preds"] = team['id']
+        if team['teamName'] == "Senators":
+            team_list["sens"] = team['id']
+        if team['teamName'] == "Capitals":
+            team_list["caps"] = team['id']
+        if team['teamName'] == "Blackhawks":
+            team_list["hawks"] = team['id']
+        if team['teamName'] == "Avalanche":
+            team_list["avs"] = team['id']
+        if team['teamName'] == "Canucks":
+            team_list["nuks"] = team['id']
+            team_list["nucks"] = team['id']
+        if team['teamName'] == "Coyotes":
+            team_list["yotes"] = team['id']
+        if team['teamName'] == "Penguins":
+            team_list["pens"] = team['id']
+        if team['teamName'] == "Hurricanes":
+            team_list["canes"] = team['id']
+        if team['teamName'] == "Lightning":
+            team_list["bolts"] = team['id']
 
     return team_list
 
