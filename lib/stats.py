@@ -174,6 +174,9 @@ def attempt_length_year_retreival(words):
     top 5 request, or a 19XX-20XX year request, or both
     """
 
+    FULL_HOCKEY_START_YEAR = 19171918
+    FIRST_HOCKEY_YEAR = 1917
+
     year = get_current_hockey_year()
     list_length = None
 
@@ -182,35 +185,37 @@ def attempt_length_year_retreival(words):
         return list_length, year
 
     elif len(words) == 1:
-        # 1917 is the first year the NHL was around. assume full year
-        if words[0].isdigit() and int(words[0]) > 19171918:
-            year = words[0]
+        # FIRST_HOCKEY_YEAR is the first year the NHL was around. Sssume full year first
+        if words[0].isdigit():
+            if int(words[0]) > FULL_HOCKEY_START_YEAR:
+                year = words[0]
+            # check length of 4 to ensure its a year
+            #   (and not top 2000 goals scorers on jets for a certain year)
+            elif int(words[0]) > FIRST_HOCKEY_YEAR and len(words[0]) == 4:
+                year = str(words[0]) + get_next_year(words[0])
 
-        # if they type a single year, transform it into the API required two year format
-        #     Eg. 2015 requested, transform to "20152016"
-        elif words[0].isdigit() and int(words[0]) > 1917 and len(words[0]) == 4:
-            year = str(words[0]) + get_next_year(words[0])
-
+        #mustn't be a year, its a stat request
         else:
             list_length = int(words[0])
+
     elif len(words) >= 2:
         # TODO: refactor this and above code to remove redundant software
-        # 1917 is the first year the NHL was around
-        if words[0].isdigit() and int(words[0]) > 19171918:
-            year = words[0]
-            list_length = int(words[1])
+        # FIRST_HOCKEY_YEAR is the first year the NHL was around
+        if words[0].isdigit():
+            if int(words[0]) > FULL_HOCKEY_START_YEAR:
+                year = words[0]
+                list_length = int(words[1])
+            elif int(words[0]) > FIRST_HOCKEY_YEAR:
+                year = str(words[0]) + get_next_year(words[0])
+                list_length = int(words[1])
 
-        elif words[0].isdigit() and int(words[0]) > 1917:
-            year = str(words[0]) + get_next_year(words[0])
-            list_length = int(words[1])
-
-        elif words[1].isdigit() and int(words[1]) > 19171918:
-            year = words[1]
-            list_length = int(words[0])
-
-        elif words[1].isdigit() and int(words[1]) > 1917:
-            year = str(words[1]) + get_next_year(words[1])
-            list_length = int(words[0])
+        elif words[1].isdigit():
+            if int(words[1]) > FULL_HOCKEY_START_YEAR:
+                year = words[1]
+                list_length = int(words[0])
+            elif int(words[1]) > FIRST_HOCKEY_YEAR:
+                year = str(words[1]) + get_next_year(words[1])
+                list_length = int(words[0])
 
     return list_length, str(year)
 
