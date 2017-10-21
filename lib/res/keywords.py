@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 import json
 
-word_lookup = None
+all_special_words = {}  # cached strings for speed
 
 def generate_keywords_object(words, description):
     return {'words': words, 'description': description}
@@ -17,6 +17,13 @@ def add_s(words):
     return new_list
 
 def generate_teams():
+
+    global all_special_words
+
+    key = 'teams'
+    if all_special_words.get(key):
+        return all_special_words[key]
+
     team_list = {}
     teams = None
     data = None
@@ -73,37 +80,68 @@ def generate_teams():
         if team['teamName'] == "Lightning":
             team_list["bolts"] = team['id']
 
+    all_special_words[key] = team_list
     return team_list
 
 def get_video_words():
     words = add_s(["video", "clip", "vid"])
     description = "Retrieves video clips from recent games for the team requested"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'video'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_team_words():
     words = ["detail", "details", "info", "history"]
     description = "Returns brief information/history on the team requested"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word= 'team'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_standings_words():
     words = ["standing", "standings", "league", "overall"]
     description = "Returns standings for overall league"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'standings'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_conference_words():
     words = ["conference"]
     description = "Returns standings for certain conferences"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'conf'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_division_words():
     words = ["div", "division"]
     description = "Returns standings for certain divisions"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'div'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
     
 def get_roster_words():
     words = ["roster", "players", "skaters", "tenders", "tendies", "goalies", "goaltenders"]
     description = "Retrieves the requested teams list of players"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'rost'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def generate_stat_helper_spiel():
     """this will take the dict we have and show the user as help all the shortcuts that are accepted
@@ -155,6 +193,11 @@ def get_stat_type_words():
 
 def get_stat_english_word(stat):
     """Will take the weirdly worded stat and return the appropriate english phrase."""
+
+    global all_special_words
+    word = 'english'
+    if all_special_words.get(word):
+        return all_special_words[word].get(stat)
 
     word_lookup = {}
 
@@ -230,6 +273,7 @@ def get_stat_english_word(stat):
     word_lookup["savePctg"] = "Save %"
     word_lookup["penaltyKillOpportunities"] = "Penalty Kill Oportunities"
 
+    all_special_words[word] = word_lookup
     return word_lookup.get(stat)
 
 def get_stats_from_english():
@@ -240,10 +284,10 @@ def get_stats_from_english():
     """
 
     # create a singleton-like dict lookup
-    global word_lookup
-
-    if word_lookup != None:
-        return word_lookup
+    global all_special_words
+    word = 'stat-english'
+    if all_special_words.get(word):
+        return all_special_words[word]
 
     #else create the lookup
 
@@ -456,27 +500,48 @@ def get_stats_from_english():
     word_lookup["stats"] = "stats"
     word_lookup["stat"] = "stats"
 
+    all_special_words[word] = word_lookup
     return word_lookup
 
 def get_sidebar_words():
     words = ["sidebarplease"]
     description = "Generates the latest /r/winnipegjets sidebar source text"
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'side'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_help_words():
     words = ["help", "what", "wut", "?", "??", "???", "info", "detail", "details"]
     description = "Displays all options that this bot is capable of."
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'help'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_projection_words():
     words = ["guess", "project", "projection", "outlook", "pace"]
     description = "Extrapolates a team's standings to the full season."
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'proj'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_game_time_words():
     words = ["next", "time", "game"]
     description = "Gets information about a team's next game."
-    return generate_keywords_object(words, description)
+
+    global all_special_words
+    word = 'next'
+    if not all_special_words.get(word):
+        all_special_words[word] = generate_keywords_object(words, description)
+    return all_special_words[word]
 
 def get_all_team_words():
     return [get_video_words(), get_team_words(), get_standings_words(), get_conference_words(),
