@@ -185,7 +185,6 @@ def attempt_length_year_retreival(words):
         return list_length, year
 
     elif len(words) == 1:
-        # FIRST_HOCKEY_YEAR is the first year the NHL was around. Sssume full year first
         if words[0].isdigit():
             if int(words[0]) > FULL_HOCKEY_START_YEAR:
                 year = words[0]
@@ -199,13 +198,11 @@ def attempt_length_year_retreival(words):
             list_length = int(words[0])
 
     elif len(words) >= 2:
-        # TODO: refactor this and above code to remove redundant software
-        # FIRST_HOCKEY_YEAR is the first year the NHL was around
-        if words[0].isdigit():
+        if words[0].isdigit() and int(words[0]) >= FIRST_HOCKEY_YEAR:
             if int(words[0]) > FULL_HOCKEY_START_YEAR:
                 year = words[0]
                 list_length = int(words[1])
-            elif int(words[0]) > FIRST_HOCKEY_YEAR:
+            elif int(words[0]) >= FIRST_HOCKEY_YEAR:
                 year = str(words[0]) + get_next_year(words[0])
                 list_length = int(words[1])
 
@@ -213,7 +210,7 @@ def attempt_length_year_retreival(words):
             if int(words[1]) > FULL_HOCKEY_START_YEAR:
                 year = words[1]
                 list_length = int(words[0])
-            elif int(words[1]) > FIRST_HOCKEY_YEAR:
+            elif int(words[1]) >= FIRST_HOCKEY_YEAR:
                 year = str(words[1]) + get_next_year(words[1])
                 list_length = int(words[0])
 

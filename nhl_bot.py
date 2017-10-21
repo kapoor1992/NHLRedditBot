@@ -67,31 +67,33 @@ def get_words(message):
     return words
 
 def check_valid_team(words, teams):
-    """Takes a list of words, and a list of teams and returns the team, and the list of remaining words."""
+    """Takes a list of words, and a list of teams. Attempts to find a team name in the first
+    couple words in the words list.
 
-    #TODO: clean this garbage code up
+    returns the team and the list of remaining words.
+    """
 
-    long_word_list = []
-    short_word_list = []
-
-    if len(words) == 0:
+    # <= 1 since if we only get "jets" it doesn't mean anything, 
+    #       same as only mentioning us in a comment.
+    if len(words) <= 1:
         return None, 0
 
-    short_team = words[0]
-    long_team = None
+    # this is either a legit single team name and stat, or a two name team that 
+    #       isn't valid since there is no stat.
+    if len(words) == 2:
+        if words[0] in teams:
+            return words[0], words[1:]
+        else:
+            return None, 0
 
+    # possible we have a two name team or a one name team with a stat request.
     if len(words) >= 3:
-        # two word team name? eg. "maple" "leafs"
-        long_team = words[0] + words[1]
-        long_word_list = words[2:]      # "technically" a shorter list
-    
-    short_word_list = words[1:]     # "technically" a longer list
-
-    #eg. "Jets"
-    if long_team in teams:
-        return long_team, long_word_list
-    elif short_team in teams:
-        return short_team, short_word_list
+        # check two name first since checking single name first can fail on "maple leafs"
+        full_name = words[0] + words[1]
+        if full_name in teams:
+            return full_name, words[2:]
+        elif words[0] in teams:
+            return words[0], words[1:]
 
     return None, words
 
@@ -125,27 +127,27 @@ def handle_message_request(words, teams):
             return sidebar.get_response()
 
     #otherwise find users request
-    elif team and remaining_words[0] in video_keywords:
-        return videos.get_response(team)
+    elif team:
+        if remaining_words[0] in video_keywords:
+            return videos.get_response(team)
 
-    elif team and remaining_words[0] in team_keywords:
-        return team_data.get_response(teams[team])
+        if remaining_words[0] in team_keywords:
+            return team_data.get_response(teams[team])
 
-    elif team and remaining_words[0] in roster_keywords:
-        return roster_data.get_response(teams[team])
+        if remaining_words[0] in roster_keywords:
+            return roster_data.get_response(teams[team])
 
-    elif team and remaining_words[0] in projection_keywords:
-        return projections.get_response(teams[team])
+        if remaining_words[0] in projection_keywords:
+            return projections.get_response(teams[team])
 
-    elif team and remaining_words[0] in standings_keywords:
-        return standings.get_response(teams[team])
+        if remaining_words[0] in standings_keywords:
+            return standings.get_response(teams[team])
 
-    elif team and remaining_words[0] in game_time_keywords:
-        return game_time.get_response(teams[team])
+        if remaining_words[0] in game_time_keywords:
+            return game_time.get_response(teams[team])
 
-    elif team and stats.is_sentence_a_stat_request(remaining_words):
-        return stats.get_response(teams[team], list(remaining_words))
-
+        if stats.is_sentence_a_stat_request(remaining_words):
+            return stats.get_response(teams[team], list(remaining_words))
     else:
         return bot_failed_comprehension()
 
