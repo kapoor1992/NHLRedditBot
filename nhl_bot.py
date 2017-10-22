@@ -97,6 +97,14 @@ def check_valid_team(words, teams):
 
     return None, words
 
+def convert_to_lowercase(words):
+    new_list = []
+
+    for word in words:
+        new_list.append(word.lower())
+
+    return new_list
+
 def handle_message_request(words, teams):
     #TODO: stop generating the word list on EVERY bot reply.
     video_keywords = keywords.get_video_words()['words']
@@ -109,6 +117,9 @@ def handle_message_request(words, teams):
     projection_keywords = keywords.get_projection_words()['words']
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
+
+    #convert words to lowercase
+    words = convert_to_lowercase(words)
 
     # first check if this is a generic call for help
     if words[0] in help_keywords:
