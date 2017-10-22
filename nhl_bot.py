@@ -56,11 +56,21 @@ def get_words(message):
 
     words = message.body.strip()
 
+    # split every paragraph looking for our username and request in a single line.
+    lines = words.split("\n")
+    for line in lines:
+        line_parts = line.split()
+
+        # get only the line with the request.
+        if len(line_parts) > 0 and 'u/nhl_stats' in line_parts[0].lower():
+            words = line
+            break
+
     # strip an ending period if one exists.
     if words[-1:] == ".":
         words = words[:-1].strip()
 
-    words = words.split(" ")
+    words = words.split()
 
     for i in range(len(words)):
         words[i] = words[i].lower()
@@ -170,10 +180,11 @@ def manage_message(message):
 
     teams = keywords.generate_teams()
 
-    #let's force the users to mentioned us as first thing in a comment, any further words are 
-    #   features and/or specific requests.
+    # go through full comment and look for request. Grab that line only.
     words = get_words(message)
     username = words.pop(0)
+
+
 
     # if the username is not the first word, ignore this message (reply to our comment?)
     # /u/nhl_stats included in this list.
