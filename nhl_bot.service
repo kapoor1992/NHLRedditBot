@@ -1,0 +1,13 @@
+[Unit]
+Description=NHL_stats bot
+
+[Service]
+Environment="PYTHONPATH=/home/kyle/NHLRedditBot"
+ExecStart=/usr/local/bin/python3.6 nhl_bot.py -d "/r/NHL_Stats" --bot-name "NHL_Stats"
+WorkingDirectory=/home/kyle/NHLRedditBot
+Type=simple                                                                     
+Restart=always                                                                  
+RestartSec=5                                                                    
+                                                                                
+[Install]                                                                       
+WantedBy=multi-user.target                                                      
