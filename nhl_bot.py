@@ -1,5 +1,4 @@
 import sys
-import praw
 import argparse
 from time import sleep
 
@@ -15,38 +14,9 @@ from lib.res import keywords
 
 from lib.test import testing_message
 from lib.support import bot_failed_comprehension
+from praw_login import r
 
 args = None
-
-def get_web_code(r):
-    global args
-
-    url = r.get_authorize_url(args.key, 'identity modconfig read privatemessages submit', True)
-    import webbrowser
-    webbrowser.open(url)
-
-    return input("enter new access info here: ")
-
-def handle_reddit_auth(r):
-    global args
-
-    r.set_oauth_app_info(client_id=args.client_id,
-                         client_secret=args.client_secret,
-                         redirect_uri='http://127.0.0.1:65010/authorize_callback')
-
-    if not args.web_code:
-        new_code = get_web_code(r)
-        access_information = r.get_access_information(new_code)
-        return
-
-    #magically authenticate attempt with provided code
-    try: 
-        access_information = r.get_access_information(args.web_code)
-    except:
-        new_code = get_web_code(r)
-        access_information = r.get_access_information(new_code)
-
-    r.set_access_credentials(**access_information)
 
 def add_dad():
     return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^my ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
@@ -98,7 +68,6 @@ def check_valid_team(words, teams):
     return None, words
 
 def handle_message_request(words, teams):
-    #TODO: stop generating the word list on EVERY bot reply.
     video_keywords = keywords.get_video_words()['words']
     team_keywords = keywords.get_team_words()['words']
     standings_keywords = keywords.get_standings_words()['words']
@@ -149,13 +118,12 @@ def handle_message_request(words, teams):
         if stats.is_sentence_a_stat_request(remaining_words):
             return stats.get_response(teams[team], list(remaining_words))
     else:
-        return bot_failed_comprehension()
+        return None
 
 def manage_message(message):
     global args
 
     response = None
-    api_calls = 0 # assume auth takes a couple requests
 
     teams = keywords.generate_teams()
 
@@ -167,8 +135,8 @@ def manage_message(message):
     # if the username is not the first word, ignore this message (reply to our comment?)
     # /u/nhl_stats included in this list.
     if 'u/nhl_stats' not in username.lower():
-        message.mark_as_read()
-        return api_calls
+        message.mark_read()
+        return
 
     requester = message.author
 
@@ -179,26 +147,19 @@ def manage_message(message):
         response = bot_failed_comprehension()
 
     message.reply(response + add_dad())
-    api_calls += 1
 
     if not args.read:
-        message.mark_as_read()
-
-    return api_calls
+        message.mark_read()
+    return
 
 def read_all_messages(r):
-    response = None
-    api_calls = 3 # assume auth takes a couple requests
-
     try: 
-        messages = r.get_unread()
-        api_calls += 1
-    except:
-        print ("Failed to retrieve new message list")
-        return
+        for message in r.inbox.unread(limit=None):
+            manage_message(message)
 
-    for message in messages:
-        api_calls += manage_message(message)
+    except Exception as e:
+        print ("Failed to get unread messages with %s" % e)
+        return
 
 def get_manual_test_string():
     """Prompts user for a manual entry and strips any accidental white space """
@@ -235,11 +196,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--dad', '-d', action="store", help='Dad\'s name', required=True)
-    parser.add_argument('--client-id', '-c', action="store", help='OAuth client_ID', required=True)
-    parser.add_argument('--client-secret', '-s', action="store", help='OAuth client_secret', required=True)
-    parser.add_argument('--web-code', '-w', action='store', help='The code returned via getAuth call.')
-    parser.add_argument('--key', '-k', action='store', help='The key to help generate oAuth creds', required=True)
-    parser.add_argument('--bot-name', '-b', action='store', help='bot\'s username', required=True)
+    parser.add_argument('--bot-name', '-b', action='store', help='bot\'s username with matching password', required=True)
     parser.add_argument('--read', '-r', action='store', help='If you want the bot to not read messages(default=read)', default=False)
     parser.add_argument('--test', '-t', action='store_true', help='If you want to manually stream data into the system and see the result', default=False)
     args = parser.parse_args()
@@ -249,14 +206,9 @@ def main():
 
     bot = '/u/' + args.bot_name 
 
-    r = praw.Reddit('testing ' + bot + ' 1.0 by ' + args.dad)
-
-    handle_reddit_auth(r)
-
     while True:
         try:
             read_all_messages(r)
-
             print ("sleeping")
             sleep(60)
         except Exception as e:

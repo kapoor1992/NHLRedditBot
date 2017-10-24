@@ -21,7 +21,7 @@ def set_case(lower_stat):
 def create_team_stats_chart(stats, year):
     """takes a teams stats and prints them pretty."""
     if not stats:
-        return bot_failed_comprehension("I failed to retrive stats for the team you wantted. Sorry.")
+        return bot_failed_comprehension("I failed to retrive stats for the team you wanted. Sorry.")
     # break the year into a human readable year frame
 
     year = year[:4] + "-" + year[4:]
