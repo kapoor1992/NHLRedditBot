@@ -26,11 +26,21 @@ def get_words(message):
 
     words = message.body.strip()
 
+    # split every paragraph looking for our username and request in a single line.
+    lines = words.split("\n")
+    for line in lines:
+        line_parts = line.split()
+
+        # get only the line with the request.
+        if len(line_parts) > 0 and 'u/nhl_stats' in line_parts[0].lower():
+            words = line
+            break
+
     # strip an ending period if one exists.
     if words[-1:] == ".":
         words = words[:-1].strip()
 
-    words = words.split(" ")
+    words = words.split()
 
     for i in range(len(words)):
         words[i] = words[i].lower()
@@ -67,6 +77,14 @@ def check_valid_team(words, teams):
 
     return None, words
 
+def convert_to_lowercase(words):
+    new_list = []
+
+    for word in words:
+        new_list.append(word.lower())
+
+    return new_list
+
 def handle_message_request(words, teams):
     video_keywords = keywords.get_video_words()['words']
     team_keywords = keywords.get_team_words()['words']
@@ -78,6 +96,9 @@ def handle_message_request(words, teams):
     projection_keywords = keywords.get_projection_words()['words']
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
+
+    #convert words to lowercase
+    words = convert_to_lowercase(words)
 
     # first check if this is a generic call for help
     if words[0] in help_keywords:
@@ -127,10 +148,11 @@ def manage_message(message):
 
     teams = keywords.generate_teams()
 
-    #let's force the users to mentioned us as first thing in a comment, any further words are 
-    #   features and/or specific requests.
+    # go through full comment and look for request. Grab that line only.
     words = get_words(message)
     username = words.pop(0)
+
+
 
     # if the username is not the first word, ignore this message (reply to our comment?)
     # /u/nhl_stats included in this list.
