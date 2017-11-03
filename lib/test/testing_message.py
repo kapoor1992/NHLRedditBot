@@ -9,7 +9,7 @@ class Testing_Message:
         self.author = "testing class"
         self.result = ""
 
-    def mark_as_read(self):
+    def mark_read(self):
         return True
 
     def reply(self, reply):
