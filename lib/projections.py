@@ -22,10 +22,10 @@ def get_response(team):
                      losses = record['leagueRecord']['losses']
                      ot     = record['leagueRecord']['ot']
 
-                     proj_points = int(points * TOTAL_GAMES / games_played)
-                     proj_wins   = int(wins * TOTAL_GAMES / games_played)
-                     proj_losses = int(losses * TOTAL_GAMES / games_played)
-                     proj_ot     = int(ot * TOTAL_GAMES / games_played)
+                     proj_points = round(points * TOTAL_GAMES / games_played)
+                     proj_wins   = round(wins * TOTAL_GAMES / games_played)
+                     proj_losses = round(losses * TOTAL_GAMES / games_played)
+                     proj_ot     = round(ot * TOTAL_GAMES / games_played)
 
                      response += "Name | Projection"
                      response += "\n---|---\n"
