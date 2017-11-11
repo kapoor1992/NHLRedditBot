@@ -148,35 +148,35 @@ class Players():
 
         new_line = ""
         if all_stats:
-            new_line += str(stat['games']) + "|"
-            new_line += str(stat['goals']) + "|"
-            new_line += str(stat['assists']) + "|"
-            new_line += str(stat['points']) + "|"
-            new_line += str(stat['pim']) + "|"
-            new_line += str(stat['timeOnIce']) + "|"
-            new_line += str(stat['plusMinus']) + "|"
-            new_line += str(stat['shots']) + "|"
-            new_line += str(stat['hits']) + "|"
-            new_line += str(stat['powerPlayGoals']) + "|"
-            new_line += str(stat['powerPlayPoints']) + "|"
-            new_line += str(stat['powerPlayTimeOnIce']) + "|"
-            new_line += str(stat['evenTimeOnIce']) + "|"
-            new_line += str(stat['faceOffPct']) + "%|"
-            new_line += str(stat['shotPct']) + "%|"
-            new_line += str(stat['gameWinningGoals']) + "|"
-            new_line += str(stat['overTimeGoals']) + "|"
-            new_line += str(stat['shortHandedGoals']) + "|"
-            new_line += str(stat['shortHandedPoints']) + "|"
-            new_line += str(stat['shortHandedTimeOnIce']) + "|"
-            new_line += str(stat['blocked']) + "|"
-            new_line += str(stat['shifts']) + "|"
+            new_line += str(stat.get('games', "N/A")) + "|"
+            new_line += str(stat.get('goals', "N/A")) + "|"
+            new_line += str(stat.get('assists', "N/A")) + "|"
+            new_line += str(stat.get('points', "N/A")) + "|"
+            new_line += str(stat.get('pim', "N/A")) + "|"
+            new_line += str(stat.get('timeOnIce', "N/A")) + "|"
+            new_line += str(stat.get('plusMinus', "N/A")) + "|"
+            new_line += str(stat.get('shots', "N/A")) + "|"
+            new_line += str(stat.get('hits', "N/A")) + "|"
+            new_line += str(stat.get('powerPlayGoals', "N/A")) + "|"
+            new_line += str(stat.get('powerPlayPoints', "N/A")) + "|"
+            new_line += str(stat.get('powerPlayTimeOnIce', "N/A")) + "|"
+            new_line += str(stat.get('evenTimeOnIce', "N/A")) + "|"
+            new_line += str(stat.get('faceOffPct', "N/A")) + "%|"
+            new_line += str(stat.get('shotPct', "N/A")) + "%|"
+            new_line += str(stat.get('gameWinningGoals', "N/A")) + "|"
+            new_line += str(stat.get('overTimeGoals', "N/A")) + "|"
+            new_line += str(stat.get('shortHandedGoals', "N/A")) + "|"
+            new_line += str(stat.get('shortHandedPoints', "N/A")) + "|"
+            new_line += str(stat.get('shortHandedTimeOnIce', "N/A")) + "|"
+            new_line += str(stat.get('blocked', "N/A")) + "|"
+            new_line += str(stat.get('shifts', "N/A")) + "|"
             new_line += "\n"
         else:
-            new_line += str(stat['games']) + "|"
-            new_line += str(stat['goals']) + "|"
-            new_line += str(stat['assists']) + "|"
-            new_line += str(stat['points']) + "|"
-            new_line += str(stat['pim'])
+            new_line += str(stat.get('games', "N/A")) + "|"
+            new_line += str(stat.get('goals', "N/A")) + "|"
+            new_line += str(stat.get('assists', "N/A")) + "|"
+            new_line += str(stat.get('points', "N/A")) + "|"
+            new_line += str(stat.get('pim', "N/A"))
             new_line += "\n"
 
         return new_line
@@ -229,7 +229,7 @@ class Players():
         stats = self._get_player_stats(player, season_type=season_type)
 
         results = self._generate_player_bio(stats)
-        results += "&nbsp;  \n"
+        results += "&nbsp;  \n\n"
         results += self._generate_player_yearly_stats(stats, all_stats=all_stats)
 
         return results
@@ -245,8 +245,6 @@ class Players():
         #default to minor stats and regular season
         all_stats = False
         season = "regular"
-
-        print ("rem words: %s" % words)
 
         for word in words:
             word = word.lower()
@@ -265,7 +263,6 @@ class Players():
 
         season_type, all_stats = self.validate_remaining_words(words)
 
-
         player_name = self.get_player_name(player)
 
         player_headshot = self._get_player_picture(player, player_name)
@@ -273,7 +270,7 @@ class Players():
 
         player_stats = self.get_formated_player_stats(player, season_type=season_type, all_stats=all_stats)
 
-        return player_headshot + player_action +"  \n" + player_stats
+        return player_headshot + player_action + player_stats
 
     def get_response(self, players, remaining_words):
 

@@ -270,7 +270,7 @@ def main():
 
     while True:
         read_all_messages(r)
-        print ("done reading messages, sleeping.")
+        print ("Done reading messages, sleeping.")
         sleep(DELAY_IN_SECONDS)
         nhl_players.update_time_stale(seconds=DELAY_IN_SECONDS)
 
