@@ -146,13 +146,13 @@ class Players():
 
         new_line = ""
         if all_stats:
+            new_line += str(stat['games']) + "|"
             new_line += str(stat['goals']) + "|"
             new_line += str(stat['assists']) + "|"
             new_line += str(stat['points']) + "|"
             new_line += str(stat['pim']) + "|"
             new_line += str(stat['timeOnIce']) + "|"
             new_line += str(stat['plusMinus']) + "|"
-            new_line += str(stat['games']) + "|"
             new_line += str(stat['shots']) + "|"
             new_line += str(stat['hits']) + "|"
             new_line += str(stat['powerPlayGoals']) + "|"
@@ -170,30 +170,40 @@ class Players():
             new_line += str(stat['shifts']) + "|"
             new_line += "\n"
         else:
-            new_line = str(stat['goals']) + "|"
+            new_line += str(stat['games']) + "|"
+            new_line += str(stat['goals']) + "|"
             new_line += str(stat['assists']) + "|"
             new_line += str(stat['points']) + "|"
-            new_line += str(stat['pim']) + "|"
-            new_line += str(stat['games']) + "|"
+            new_line += str(stat['pim'])
             new_line += "\n"
 
         return new_line
+
+    def _player_has_playoff_games(self, stats):
+        """Checks if this player has playoff games played. Returns true is they have played in playoffs"""
+
+        return stats != []
 
     def _generate_player_yearly_stats(self, player, league="National Hockey League", season_type="regular", season=None, all_stats=False):
         """takes a players stats and returns a history of their results in a certain league.
         defaults to NHL.
         """
 
+        # if they don't have career stats for playoffs, they haven't played NHL playoff games.
         results = ""
+        career_stats = None
+        yearly_stats = player['stats'][0]['splits']
+        if self._player_has_playoff_games(player['stats'][1]['splits']):
+            career_stats = player['stats'][1]['splits'][0]['stat']
+        else:
+            return str(player['fullName']) + " hasn't played in the playoffs yet... Maybe they will soon!  \n"
+        
         if all_stats:
-            results += "Team|Season|Goals|Assists|Points|PIMS|TOI|+/-|Games|Shots|Hits|PP Goals|PP Points|PP TOI|ES TOI|FO%|S%|GWG|OT Goals|SH Goals|SH Points|SH TOI|Blocked Shots|Shifts\n"
+            results += "Team|Season|Games|Goals|Assists|Points|PIMS|TOI|+/-|Shots|Hits|PP Goals|PP Points|PP TOI|ES TOI|FO%|S%|GWG|OT Goals|SH Goals|SH Points|SH TOI|Blocked Shots|Shifts\n"
             results +="|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|\n"
         else:
-            results += "Team|Season|Goals|Assists|Points|PIM|Games Played|\n"
+            results += "Team|Season|Games|Goals|Assists|Points|PIM|\n"
             results +="|:--:|:--:|:--:|:--:|:--:|:--:|:--:|\n"
-
-        yearly_stats = player['stats'][0]['splits']
-        career_stats = player['stats'][1]['splits'][0]['stat']
 
         for year in yearly_stats:
             stat = year['stat']
@@ -211,29 +221,59 @@ class Players():
 
         return results + "  \n"
 
-    def get_formated_player_stats(self, player, season_type="regular"):
+    def get_formated_player_stats(self, player, season_type="regular", all_stats=False):
         """gets the stats for a certain player and returns the formated list of all stats."""
 
         stats = self._get_player_stats(player, season_type=season_type)
 
         results = self._generate_player_bio(stats)
         results += "&nbsp;  \n"
-        results += self._generate_player_yearly_stats(stats, all_stats=False)
+        results += self._generate_player_yearly_stats(stats, all_stats=all_stats)
 
         return results
 
-    def get_players_profile(self, player):
+    def validate_remaining_words(self, words):
+        """Take a word list and trys to figure out if we want regular season or playoffs
+        (regualr season by default) as well as if they want their full stats or just their
+        basic stats.
+
+        returns values for what we think they are requesting.
+        """
+
+        #default to minor stats and regular season
+        all_stats = False
+        season = "regular"
+
+        print ("rem words: %s" % words)
+
+        for word in words:
+            word = word.lower()
+            if word in ["playoff", "poffs", "playoffs"]:
+                season = "playoffs"
+
+            if word in ["all", "full", "everything", "complete"]:
+                all_stats = True
+
+        print ("returning %s and %s " %(season, all_stats))
+
+        return season, all_stats
+
+    def get_players_profile(self, player, words):
         """builds the requested players profile. and returns the reddit formatted data"""
+
+        season_type, all_stats = self.validate_remaining_words(words)
+
+
         player_name = self.get_player_name(player)
 
         player_headshot = self._get_player_picture(player, player_name)
         player_action = self._get_player_actionshot(player, player_name)
 
-        player_stats = self.get_formated_player_stats(player, season_type="regular")
+        player_stats = self.get_formated_player_stats(player, season_type=season_type, all_stats=all_stats)
 
         return player_headshot + player_action +"  \n" + player_stats
 
-    def get_response(self, players, stat=None):
+    def get_response(self, players, remaining_words):
 
         if len(players) > 1:
             names = self.get_players_names(players)
@@ -242,7 +282,7 @@ class Players():
             result += "Please make another request with the full name or a unique last name.  \n"
             return result
         else:
-            return self.get_players_profile(players[0])
+            return self.get_players_profile(players[0], remaining_words)
 
 # testing/sanity code
 if __name__ == '__main__':
@@ -250,5 +290,5 @@ if __name__ == '__main__':
     
     print ("Testing ehler by default...")
     # Ehlers
-    print (players.get_response([8477940], None))
+    print (players.get_response([8477940], []))
     print ("Done...")

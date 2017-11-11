@@ -125,8 +125,8 @@ def handle_message_request(words, teams):
     help_keywords = keywords.get_help_words()['words']
 
     team = None
-    remaining_words = None
-    players = None
+    remaining_words = []
+    players = []
 
     #convert words to lowercase
     words = convert_to_lowercase(words)
@@ -140,7 +140,7 @@ def handle_message_request(words, teams):
 
     if not team:
         #check if it is a player request
-        players, words = check_player_name(words)
+        players, remaining_words = check_player_name(words)
 
     if (not team or len(remaining_words) == 0) and not players:
         return None
