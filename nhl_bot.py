@@ -242,8 +242,8 @@ def start_test_mode():
 
     while test_string != "q":
         test_string = args.bot_name + " " + test_string  # mimic a reddit comment requester
-        new_message = testing_message.Testing_Message(test_string)
-        manage_message(testing_message.Testing_Message(test_string))
+        new_message = testing_message.Manual_Testing_Message(test_string)
+        manage_message(testing_message.Manual_Testing_Message(test_string))
         print(new_message.get_result())
 
         test_string = get_manual_test_string()

@@ -1,4 +1,4 @@
-class Testing_Message:
+class Manual_Testing_Message:
     """A class that mimics a PRAW message class."""
     body = ""
     author = ""
