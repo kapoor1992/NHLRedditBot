@@ -270,7 +270,7 @@ class Players():
 
         player_stats = self.get_formated_player_stats(player, season_type=season_type, all_stats=all_stats)
 
-        return player_headshot + player_action + player_stats
+        return player_headshot + player_action + "  \n" + player_stats
 
     def get_response(self, players, remaining_words):
 
