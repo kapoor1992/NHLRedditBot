@@ -1,6 +1,8 @@
 from urllib.request import urlopen
 import traceback
 
+from .res.keywords import resolve_team_name
+
 def get_identifiers(lines):
     identifiers = []
 
@@ -72,6 +74,9 @@ def get_videos(lines, team):
     return videos
 
 def get_response(team):
+
+    # make sure we resolve the team name appropriately if it is a single name team
+    team = resolve_team_name(team)
 
     try:
         lines = urlopen("https://www.nhl.com/" + team + "/video/").readlines()

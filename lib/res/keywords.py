@@ -608,3 +608,34 @@ def generate_help_docs(name, teams):
     result += "team name list:\n\n    <" + add_list_option(team_list)  + "\n\n"
 
     return result
+
+def resolve_team_name(team):
+    """takes a team name and checks if there is a full form of the name we should be
+    converting our string to.
+
+    Eg. 'Jackets' returns 'bluejackets'
+    """
+
+    team_list = {}
+    team_list['jackets'] = "bluejackets"
+    team_list['wings'] = "redwings"
+    team_list['maple'] = "mapleleafs"
+    team_list['leafs'] = "mapleleafs"
+    team_list['hawks'] = "blackhawks"
+    team_list['preds'] = "predators"
+    team_list['avs'] = "avalanche"
+    team_list['canes'] = "Hurricanes"
+    team_list['isles'] = "islanders"
+    team_list['pens'] = "penguins"
+    team_list['caps'] = "capitals"
+    team_list['habs'] = "canadiens"
+    team_list['sens'] = "senators"
+    team_list['bolts'] = "lightning"
+    team_list['yotes'] = "coyotes"
+    team_list['nuks'] = "canucks"
+    team_list['nucks'] = "canucks"
+
+    if team in team_list:
+        return team_list[team]
+
+    return team
