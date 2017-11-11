@@ -11,12 +11,14 @@ from lib import projections
 from lib import standings
 from lib import game_time
 from lib.res import keywords
+from lib.res import players
 
 from lib.test import testing_message
 from lib.support import bot_failed_comprehension
 from praw_login import r
 
 args = None
+nhl_players = None
 
 def add_dad():
     return '---\n\n^^If ^^you ^^have ^^problems, ^^please [^^PM ^^my ^^dads.](https://www.reddit.com/message/compose?to=%2Fr%2FNHL_Stats)'
@@ -56,7 +58,7 @@ def check_valid_team(words, teams):
     # <= 1 since if we only get "jets" it doesn't mean anything, 
     #       same as only mentioning us in a comment.
     if len(words) <= 1:
-        return None, 0
+        return None, []
 
     # this is either a legit single team name and stat, or a two name team that 
     #       isn't valid since there is no stat.
@@ -64,7 +66,7 @@ def check_valid_team(words, teams):
         if words[0] in teams:
             return words[0], words[1:]
         else:
-            return None, 0
+            return None, []
 
     # possible we have a two name team or a one name team with a stat request.
     if len(words) >= 3:
@@ -85,6 +87,31 @@ def convert_to_lowercase(words):
 
     return new_list
 
+def _make_name(words):
+    """takes a list of words and returns a string with spaces in between it."""
+    return " ".join(words)
+
+def check_player_name(words):
+    """takes a list of words and trys to find a player in the NHL that has this name.   
+    this function will return any players that share this name.
+    """
+
+    # check for a player by looking at all the words as a string then working backwards.
+    for x in reversed(range(len(words) + 1)):
+
+        name = words[:x]
+        remaining = words[x:]
+
+        if name == []:
+            continue
+
+        player = nhl_players.get_player(_make_name(name))
+        if player:
+            # print ("player hit %s" % player )
+            return player, remaining
+
+    return None, words
+
 def handle_message_request(words, teams):
     video_keywords = keywords.get_video_words()['words']
     team_keywords = keywords.get_team_words()['words']
@@ -97,6 +124,10 @@ def handle_message_request(words, teams):
     game_time_keywords = keywords.get_game_time_words()['words']
     help_keywords = keywords.get_help_words()['words']
 
+    team = None
+    remaining_words = None
+    players = None
+
     #convert words to lowercase
     words = convert_to_lowercase(words)
 
@@ -107,8 +138,15 @@ def handle_message_request(words, teams):
     #attempt to pull team name and continue
     team, remaining_words = check_valid_team(words, teams)
 
-    if team == None or len(remaining_words) == 0:
+    if not team:
+        #check if it is a player request
+        players, words = check_player_name(words)
+
+    if (not team or len(remaining_words) == 0) and not players:
         return None
+
+    elif players:
+        return nhl_players.get_response(players, remaining_words)
 
     elif remaining_words[0] in sidebar_keywords:
         if len(remaining_words) == 3:
@@ -215,6 +253,10 @@ def start_test_mode():
 
 def main():
     global args
+    global nhl_players
+    DELAY_IN_SECONDS = 60
+
+    nhl_players = players.Players()
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--dad', '-d', action="store", help='Dad\'s name', required=True)
@@ -226,18 +268,11 @@ def main():
     if args.test:
         start_test_mode()
 
-    bot = '/u/' + args.bot_name 
-
     while True:
-        try:
-            read_all_messages(r)
-            print ("sleeping")
-            sleep(60)
-        except Exception as e:
-            print ("exception occurred in main loop:")
-            print (str(e))
-            sleep(300)
-            pass
+        read_all_messages(r)
+        print ("done reading messages, sleeping.")
+        sleep(DELAY_IN_SECONDS)
+        nhl_players.update_time_stale(seconds=DELAY_IN_SECONDS)
 
 if __name__ == '__main__':
     main()
