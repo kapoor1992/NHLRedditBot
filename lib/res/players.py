@@ -103,6 +103,8 @@ class Players():
         self.all_players = new_player_list
         self.player_names = new_id_list
 
+        print ("Players updated!")
+
     def get_player(self, player_name):
         """Takes player_name and trys to return a list of players that have said name."""
         return self.all_players.get(player_name)
