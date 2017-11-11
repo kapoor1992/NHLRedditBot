@@ -66,7 +66,10 @@ def is_valid_year(year_range):
     are 1 year apart.
     """
 
-    if len(year_range) != 8:
+    if not year_range:
+        return False
+
+    if len(str(year_range)) != 8:
         return False
 
     year1 = year_range[:4]
@@ -74,7 +77,7 @@ def is_valid_year(year_range):
 
     try:
         if int(year2) - int(year1) == 1:
-            if year1 <= int(get_current_hockey_year_start()):
+            if int(year1) <= int(get_current_hockey_year_start()):
                 return True
         return False
 

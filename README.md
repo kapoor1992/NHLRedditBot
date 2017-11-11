@@ -4,7 +4,7 @@ Posts NHL information to Reddit.
 
 ## Installation
 ```
-pip install praw==5.2 python-dateutil
+pip install praw==5.2 python-dateutil pytest
 ```
 
 then do a git cloneof the repo. In the root of the project you need to create a file called praw_login.py that contains the following snippits
