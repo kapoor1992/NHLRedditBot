@@ -30,7 +30,7 @@ def get_names(lines):
                     copy = True
                 elif (copy) & (char == '<'):
                     break
-                elif (copy):
+                elif (copy) and char != "\\":
                     name += char
             names.append(name)
 
