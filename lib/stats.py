@@ -7,11 +7,13 @@ from .res import keywords
 
 # makes sure the stat requested is in the proper format before the search
 def set_case(lower_stat):
+    # by default leave this stat the same
     stat = lower_stat
     
     stats = keywords.get_stat_type_words()['words']
 
     for listing in stats:
+        # transform that stat to the new one we found
         if lower_stat == listing.lower():
             stat = listing
             break
@@ -21,7 +23,7 @@ def set_case(lower_stat):
 def create_team_stats_chart(stats, year):
     """takes a teams stats and prints them pretty."""
     if not stats:
-        return bot_failed_comprehension("I failed to retrive stats for the team you wanted. Sorry.")
+        return bot_failed_comprehension("I failed to retrieve stats for the team you wanted. Sorry.")
     # break the year into a human readable year frame
 
     year = year[:4] + "-" + year[4:]
@@ -36,11 +38,11 @@ def create_team_stats_chart(stats, year):
     return result
 
 def get_refined_team_stats(team, year=get_current_hockey_year()):
-    """formats a whole teams stats into a nicly readable and manageable way"""
+    """formats a whole teams stats into a nicely readable and manageable way"""
 
     data = get_team_stats(team, year=year)
 
-    #crete an easy to manage object based on string identifier
+    # Create an easy to manage object based on string identifier
     team_stats = {}
 
     #go through numerical stats first
@@ -73,7 +75,7 @@ def get_team_stats(team, year=get_current_hockey_year()):
     """Returns a certain teams stats for a certain year, or default this year"""
 
     try:
-        data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.stats&stats=yearByYear&season=" + year)
+        data = urlopen("https://statsapi.web.nhl.com/api/v1/teams/" + str(team) + "?expand=team.stats&stats=yearByYear&season=" + str(year))
         data = json.load(data)
 
         return data['teams'][0]['teamStats'][0]['splits']
@@ -105,7 +107,7 @@ def get_certain_stat_leader(stat_requested, year=get_current_hockey_year(), cach
 
     cache - used to bring down the # of JSON calls when collecting multiple stats from the same team.
     year - year stats are requested from, defaulting to this year.
-    team - when there is no chace a team must be provided to pull data. 
+    team - when there is no chance a team must be provided to pull data. 
             If team and cache passed, we always assume cache is used and not fresh data.
     """
 
@@ -118,7 +120,7 @@ def get_certain_stat_leader(stat_requested, year=get_current_hockey_year(), cach
         players = get_player_stats(team, year=year)
 
     if not players:
-        # check what kind of error occured and error message on it
+        # check what kind of error occurred and error message on it
         if not is_valid_year(year):
             return bot_failed_comprehension(error_message="You're requested a date range that doesn't make sense.")
         else:
@@ -219,7 +221,7 @@ def attempt_length_year_retreival(words):
 def is_sentence_a_stat_request(words):
     """This will check if there is a stat within the sentence we are parsing"""
 
-    # Go through the list and steal all the nubmers from the list of words.
+    # Go through the list and steal all the numbers from the list of words.
     number_list = []
     word_list = []
     
@@ -245,7 +247,7 @@ def attempt_to_get_readable_stat(words):
     return legal_words.get(" ".join(words))
 
 def attempt_request_breakdown(words):
-    """this will take the remaming words in the request, and try to decipher what their request is.
+    """this will take the renaming words in the request, and try to decipher what their request is.
 
     Eg. 'jets goals 2015 5' for 20152016 year top 5 goals
     Eg. 'jets gaa 2015' for 20152016 year goalsAginstAverage
@@ -256,12 +258,12 @@ def attempt_request_breakdown(words):
 
     Eg. 'jets stats' for all team stats
 
-    Lots of grammar checking which results in intersting code
+    Lots of grammar checking which results in interesting code
     """
 
     results = {'stat': None, 'length':None, 'year':None}
 
-    # Go through the list and steal all the nubmers from the list of words.
+    # Go through the list and steal all the numbers from the list of words.
     number_list = []
     word_list = []
     

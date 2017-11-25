@@ -180,8 +180,6 @@ def handle_message_request(words, teams):
         return None
 
 def manage_message(message):
-    global args
-
     response = None
 
     teams = keywords.generate_teams()
@@ -189,8 +187,6 @@ def manage_message(message):
     # go through full comment and look for request. Grab that line only.
     words = get_words(message)
     username = words.pop(0)
-
-
 
     # if the username is not the first word, ignore this message (reply to our comment?)
     # /u/nhl_stats included in this list.
