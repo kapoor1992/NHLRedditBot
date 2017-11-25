@@ -284,7 +284,6 @@ def attempt_request_breakdown(words):
     return results
 
 def get_response(team, words):
-
     breakdown = attempt_request_breakdown(words)
 
     stat = breakdown['stat']

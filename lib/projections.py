@@ -14,26 +14,26 @@ def get_response(team):
         for i in range(len(data['records'])):
             for record in data['records'][i]['teamRecords']:
                 
-                 if (record['team']['id'] == team):
-                     games_played = record['gamesPlayed']
-                     
-                     points = record['points']
-                     wins   = record['leagueRecord']['wins']
-                     losses = record['leagueRecord']['losses']
-                     ot     = record['leagueRecord']['ot']
+                if (str(record['team']['id']) == str(team)):
+                    games_played = record['gamesPlayed']
 
-                     proj_points = round(points * TOTAL_GAMES / games_played)
-                     proj_wins   = round(wins * TOTAL_GAMES / games_played)
-                     proj_losses = round(losses * TOTAL_GAMES / games_played)
-                     proj_ot     = round(ot * TOTAL_GAMES / games_played)
+                    points = record['points']
+                    wins   = record['leagueRecord']['wins']
+                    losses = record['leagueRecord']['losses']
+                    ot     = record['leagueRecord']['ot']
 
-                     response += "Name | Projection"
-                     response += "\n---|---\n"
-                     response += "Points | " + str(proj_points) + "\n"
-                     response += "Record |" + str(proj_wins) + "-" + str(proj_losses) + "-" + str(proj_ot) + "\n"
-                     response += "Please note that rounding may result in slight inconsistencies.\n\n"
+                    proj_points = round(points * TOTAL_GAMES / games_played)
+                    proj_wins   = round(wins * TOTAL_GAMES / games_played)
+                    proj_losses = round(losses * TOTAL_GAMES / games_played)
+                    proj_ot     = round(ot * TOTAL_GAMES / games_played)
 
-                     return response
+                    response += "Name | Projection"
+                    response += "\n---|---\n"
+                    response += "Points | " + str(proj_points) + "\n"
+                    response += "Record |" + str(proj_wins) + "-" + str(proj_losses) + "-" + str(proj_ot) + "\n"
+                    response += "Please note that rounding may result in slight inconsistencies.\n\n"
+
+                    return response
 
         if response == '':
             raise LookupError("Team not found")
