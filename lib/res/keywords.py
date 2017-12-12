@@ -271,7 +271,7 @@ def get_stat_english_word(stat):
     word_lookup["faceOffWinPercentage"] = "Faceoff Win %"
     word_lookup["shootingPctg"] = "Shooting %"
     word_lookup["savePctg"] = "Save %"
-    word_lookup["penaltyKillOpportunities"] = "Penalty Kill Oportunities"
+    word_lookup["penaltyKillOpportunities"] = "Penalty Kill Opportunities"
 
     all_special_words[word] = word_lookup
     return word_lookup.get(stat)
